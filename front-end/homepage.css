@@ -1,0 +1,35 @@
+body {
+    background-color: #f7f7f7;
+}
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card-body {
+    padding: 1rem 1.5rem;
+    flex-wrap: wrap;                   /*(Here the secret of Cards positions)*/
+    justify-content: center;
+}
+h2 {
+    font-weight: bold;
+}
+.progress {
+    height: 20px;
+    border-radius: 10px;
+}
+footer {
+    border-top: 2px solid #e0e0e0;
+    border-radius: 10px;
+    margin: 5px;
+}
+footer div {
+    cursor: pointer;
+}
+footer div p {
+    margin: 0;
+    font-weight: bold;
+}
+footer div i {
+    font-size: 1.5rem;
+}
