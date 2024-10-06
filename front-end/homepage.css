@@ -4,7 +4,7 @@ body {
 .card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 .card-body {
     padding: 1rem 1.5rem;
@@ -18,18 +18,32 @@ h2 {
     height: 20px;
     border-radius: 10px;
 }
-footer {
+.footer-container {
     border-top: 2px solid #e0e0e0;
-    border-radius: 10px;
-    margin: 5px;
+    border-radius: 20px;
 }
-footer div {
-    cursor: pointer;
-}
-footer div p {
+
+/* Footer icon and text styles */
+footer .text-center button {
     margin: 0;
+    font-size: 14px;
     font-weight: bold;
 }
-footer div i {
-    font-size: 1.5rem;
+
+footer .text-center i {
+    font-size: 24px;
+}
+
+footer a {
+    color: #000;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #000;
+    text-decoration: underline;
+}
+.img {
+    height: 2rem;
+    float: left;
 }
