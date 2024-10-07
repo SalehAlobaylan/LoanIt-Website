@@ -4,8 +4,8 @@ const User = require('../datamodels/User');
 const { sendError } = require('../config/errorHandler');
 
 const register = async (req, res, next) => {
+    console.log(req.body);
     const { fullName, phoneNumber, email, password } = req.body;
-
     try {
 
         const existingUser = await User.findOne({
@@ -34,6 +34,7 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
+    console.log(req.body);
     const { phoneNumber, password } = req.body;
 
     try {

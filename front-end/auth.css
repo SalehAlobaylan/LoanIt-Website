@@ -45,30 +45,29 @@ form {
     flex-direction: column;
 }
 
-.input-group {
+.phone-input-group {
     display: flex;
     align-items: stretch;
     margin-bottom: 16px;
     gap: 8px;
 }
 
-.input-group .country-code {
+.phone-input-group .country-code {
     background-color: #f5f5f5;
     color: #333;
-    padding: 10px 15px;
+    padding: 10px ;
     border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
 }
 
-.input-group input {
+.phone-input-group input {
     flex: 1;
-    padding: 10px;
     border-radius: 8px;
     border: none;
     background-color: #f5f5f5;
+    width: 100%;
     outline: none;
     margin-bottom: 0;
 }

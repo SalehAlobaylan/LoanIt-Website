@@ -12,14 +12,12 @@
         <div class="card">
             <h2>Welcome back</h2>
             <p>Happy to see you again</p>
-            <form action="">
-                <div class="input-group">
-                    <div class="country-code">
-                        +966
-                    </div>
-                    <input type="tel" placeholder="512345678">
+            <form id="login-form">
+                <div class="phone-input-group">
+                    <div class="country-code">+966</div>
+                    <input type="tel" id="phoneNumber" placeholder="512345678"  required pattern="[0-9]{9}">
                 </div>
-                <input type="password" placeholder="************">
+                <input type="password" id="password" placeholder="************" required>
                 <a href="reset-password.html" class="forgot-password">Forgot password?</a>
                 <button type="submit">Login</button>
             </form>
@@ -42,5 +40,7 @@
             <button class="btn btn-warning">Profile</button>
         </div>
     </footer>
+
+    <script type="module" src="js/auth.js"></script>
 </body>
 </html>
