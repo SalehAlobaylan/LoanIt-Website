@@ -12,19 +12,6 @@ const UserSchema = new Schema({
 
 })
 
-UserSchema.pre('save', async function (next) {
-    const user = this;
-    if(!user.isModified('password')) return next();
-
-    try {
-        const salt = await bcrypt.genSalt();
-        user.password = await bcrypt.hash(user.password, salt);
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
 UserSchema.methods.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 }

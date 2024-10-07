@@ -4,8 +4,8 @@ const User = require('../datamodels/User');
 const { sendError } = require('../config/errorHandler');
 
 const register = async (req, res, next) => {
-    console.log(req.body);
     const { fullName, phoneNumber, email, password } = req.body;
+
     try {
 
         const existingUser = await User.findOne({
@@ -25,6 +25,7 @@ const register = async (req, res, next) => {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = new User({ fullName, phoneNumber, email, password: hashedPassword });
         await user.save();
         res.status(201).json({ user });
@@ -34,7 +35,6 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-    console.log(req.body);
     const { phoneNumber, password } = req.body;
 
     try {
@@ -42,7 +42,6 @@ const login = async (req, res, next) => {
         if (!user) {
             return sendError(res, 'AUTH_002');
         }
-
         const isPasswordValid = await user.comparePassword(password);
         if (!isPasswordValid) {
             return sendError(res, 'AUTH_001');
@@ -52,7 +51,6 @@ const login = async (req, res, next) => {
         const userObject = user.toObject();
 
         delete userObject.password;
-
         res.json({ ...userObject, token });
     } catch (error) {
         next(error);
