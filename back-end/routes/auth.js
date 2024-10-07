@@ -1,21 +1,10 @@
 const express = require('express');
+const { register, login } = require('../controllers/auth');
+
 const router = express.Router();
 
-const User = require('../datamodels/User');
-// const Schema = mongoose.Schema;
-// const UserSchema = new Schema({
-    
-//     fullName: { type: String, required: true },
-//     phoneNumber: { type: String, required: true },
-//     email: { type: String, required: true },
-//     password: { type: String, required: true },
-//     createdAt: { type: Date, default: Date.now },
-
-// })
-
-
-
-
+router.post('/login', login);
+router.post('/register', register);
 
 
 module.exports = router;
