@@ -17,4 +17,13 @@ const LoanSchema = new Schema({
     createdAt: { type: Date, default: Date.now }, 
 });
 
+LoanSchema.pre('remove', async function(next) {
+    try {
+        await mongoose.model('Transaction').deleteMany({ loanId: this._id });
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
 module.exports = mongoose.model('Loan', LoanSchema);
