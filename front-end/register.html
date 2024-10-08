@@ -12,16 +12,16 @@
         <div class="card">
             <h2>Register</h2>
             <p>Little information and you're ready to go</p>
-            <form action="">
-                <input type="text" placeholder="Full Name">
-                <div class="input-group">
+            <form id="register-form">
+                <input type="text" id="fullName" placeholder="Full Name" required>
+                <div class="phone-input-group">
                     <div class="country-code">
                         +966
                     </div>
-                    <input type="tel" placeholder="512345678">
+                    <input type="tel" id="phoneNumber" placeholder="512345678" required pattern="[0-9]{9,12}">
                 </div>
-                <input type="email" placeholder="Email">
-                <input type="password" placeholder="************">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="************" required>
                 <button type="submit">Register</button>
             </form>
             <p class="footer-text">Already have an account? <a href="login.html">Login</a></p>
@@ -43,5 +43,7 @@
             <button class="btn btn-warning">Profile</button>
         </div>
     </footer>
+
+    <script type="module" src="js/auth.js"></script>
 </body>
 </html>
