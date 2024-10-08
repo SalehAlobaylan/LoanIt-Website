@@ -56,3 +56,9 @@ if (loginForm) {
         loginUser(phoneNumber, password);
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    if (api.isAuthenticated()) {
+        window.location.href = 'home_page.html';
+    }
+})

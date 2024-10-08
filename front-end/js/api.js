@@ -109,5 +109,6 @@ export const api = {
     put: (endpoint, body, isProtected = true) => request(endpoint, { method: 'PUT', body, isProtected }),
     delete: (endpoint, isProtected = true) => request(endpoint, { method: 'DELETE', isProtected }),
     requireAuth,
+    isAuthenticated,
     logout,
 };
