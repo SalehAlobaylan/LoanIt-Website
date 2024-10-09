@@ -8,6 +8,14 @@ const errorCodes = {
     GEN_006: { message: "Request timeout", icon: "CLOCK", status: 408 },
     GEN_007: { message: "Service unavailable", icon: "SERVER", status: 503 },
 
+    // Validation Errors (VAL)
+    VAL_001: { message: "Invalid phone number format", icon: "PHONE", status: 400 },
+    VAL_002: { message: "Invalid email format", icon: "EMAIL", status: 400 },
+    VAL_003: { message: "Invalid password format", icon: "LOCK", status: 400 },
+    VAL_004: { message: "Field cannot be empty", icon: "FORM", status: 400 },
+    VAL_005: { message: "Invalid date format", icon: "CALENDAR", status: 400 },
+    VAL_006: { message: "This field is required", icon: "FORM", status: 400 },
+
     // Authentication Errors (AUTH)
     AUTH_001: { message: "Invalid credentials", icon: "LOCK", status: 401 },
     AUTH_002: { message: "User not found", icon: "USER", status: 404 },
@@ -20,11 +28,12 @@ const errorCodes = {
     // Loan Errors (LOAN)
     LOAN_001: { message: "Loan not found", icon: "LOAN", status: 404 },
     LOAN_002: { message: "Loan creation failed", icon: "LOAN", status: 400 },
-    LOAN_003: { message: "Invalid loan status", icon: "LOAN", status: 400 },
-    LOAN_004: { message: "Invalid loan amount", icon: "LOAN", status: 400 },
-    LOAN_005: { message: "Loan update failed", icon: "LOAN", status: 400 },
-    LOAN_006: { message: "Loan deletion failed", icon: "LOAN", status: 400 },
-    LOAN_007: { message: "Unauthorized loan action", icon: "LOCK", status: 403 },
+    LOAN_003: { message: "Invalid loan role", icon: "LOAN", status: 400 },
+    LOAN_004: { message: "Invalid loan status", icon: "LOAN", status: 400 },
+    LOAN_005: { message: "Invalid loan amount", icon: "LOAN", status: 400 },
+    LOAN_006: { message: "Loan update failed", icon: "LOAN", status: 400 },
+    LOAN_007: { message: "Loan deletion failed", icon: "LOAN", status: 400 },
+    LOAN_008: { message: "No loan found", icon: "LOAN", status: 400 },
 
     // Database Errors (DB)
     DB_001: { message: "Database connection failed", icon: "SERVER", status: 500 },
@@ -38,6 +47,7 @@ const errorCodes = {
     TRANS_004: { message: "Transaction deletion failed", icon: "TRANSACTION", status: 400 },
     TRANS_005: { message: "Invalid transaction amount", icon: "TRANSACTION", status: 400 }
 };
+
 
 function getErrorPayload(code, customMessage = null) {
     if (!errorCodes[code]) {

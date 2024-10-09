@@ -8,11 +8,11 @@ const LoanSchema = new Schema({
 
     role: { type: String, enum: ['BORROWER', 'LENDER'], required: true },
 
-    loanTitle: { type: String, required: true },
+    title: { type: String, required: true },
 
-    loanDate: { type: Date, default: Date.now, required: true },
+    date: { type: Date, default: Date.now, required: true },
     
-    loanNotes: { type: String }, 
+    notes: { type: String }, 
 
     createdAt: { type: Date, default: Date.now }, 
 });

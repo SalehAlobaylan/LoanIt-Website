@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../datamodels/User');
-const { sendError } = require('../config/errorHandler');
+const { sendError } = require('../utils/errorHandler');
 
 const register = async (req, res, next) => {
     const { fullName, phoneNumber, email, password } = req.body;
