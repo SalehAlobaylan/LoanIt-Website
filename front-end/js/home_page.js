@@ -1,8 +1,8 @@
 import { api } from './api.js';
 
-document.addEventListener('DOMContentLoaded', function() {
-    api.requireAuth(); // Redirect to login if the user is not authenticated
-});
+// document.addEventListener('DOMContentLoaded', function() {
+//     api.requireAuth(); // Redirect to login if the user is not authenticated
+// });
 
 
 // id signout
