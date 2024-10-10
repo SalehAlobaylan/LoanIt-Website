@@ -14,18 +14,14 @@ async function register(fullName, phoneNumber, email, password) {
     }
 }
 
-
-const registerForm = document.getElementById('register-form');
-if (registerForm) {
-    registerForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const fullName = document.getElementById('fullName').value.trim();
-        const phoneNumber = '966' +  document.getElementById('phoneNumber').value.trim().slice(-9);
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value.trim();
-        register(fullName, phoneNumber, email, password);
-    });
-}
+document.getElementById('register-form')?.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const fullName = document.getElementById('fullName').value.trim();
+    const phoneNumber = '966' + document.getElementById('phoneNumber').value.trim().slice(-9);
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    register(fullName, phoneNumber, email, password);
+});
 
 async function loginUser(phoneNumber, password) {
     try {
@@ -46,16 +42,12 @@ async function loginUser(phoneNumber, password) {
     }
 }
 
-const loginForm = document.getElementById('login-form');
-if (loginForm) {
-    loginForm.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const phoneNumber = '966' + document.getElementById('phoneNumber').value.trim().slice(-9);
-        const password = document.getElementById('password').value.trim();
-
-        loginUser(phoneNumber, password);
-    });
-}
+document.getElementById('login-form')?.addEventListener('submit', function(event) {
+    event.preventDefault();
+    const phoneNumber = '966' + document.getElementById('phoneNumber').value.trim().slice(-9);
+    const password = document.getElementById('password').value.trim();
+    loginUser(phoneNumber, password);
+});
 
 document.addEventListener('DOMContentLoaded', function () {
     if (api.isAuthenticated()) {
