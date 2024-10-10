@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,106 +8,110 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons for Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="register.css">
     <style>
         body {
-    background-color: #f7f7f7;
-}
+            background-color: #f7f7f7;
+        }
 
-/* Styling for the container card */
-.card {
-    border: none;
-    border-radius: 25px;
-}
+        /* Styling for the container card */
+        .card {
+            border: none;
+            border-radius: 25px;
+        }
 
-/* Custom styles for form controls */
-.form-control,
-.input-group-text,
-.form-select {
-    border-radius: 10px;
-}
+        /* Custom styles for form controls */
+        .form-control,
+        .input-group-text,
+        .form-select {
+            border-radius: 10px;
+        }
 
-/* Custom button style for submit button */
-.btn-warning {
-    background: linear-gradient(90deg, rgba(255,167,38,1) 0%, rgba(255,196,0,1) 100%);
-    border: none;
-}
+        /* Custom button style for submit button */
+        .btn-warning {
+            background: linear-gradient(90deg, rgba(255, 167, 38, 1) 0%, rgba(255, 196, 0, 1) 100%);
+            border: none;
+        }
 
-/* Adjust border styles */
-.border-warning {
-    border-color: #FFAE38 !important;
-}
-
+        /* Adjust border styles */
+        .border-warning {
+            border-color: #FFAE38 !important;
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <!-- Register Loan Transaction Modal/Container -->
         <div class="card shadow p-4" style="border-radius: 25px; max-width: 450px;">
-            <!-- Modal Header -->
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h4 class="text-warning fw-bold">Register Loan Transaction</h4>
-                <button class="btn-close" aria-label="Close"></button>
-            </div>
-
-            <!-- Select Type Dropdown -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Select Type</label>
-                <select class="form-select border-warning" style="border-width: 2px;" aria-label="Select Type">
-                    <option selected>Borrower</option>
-                    <option value="1">Lender</option>
-                    <option value="2">Borrower</option>
-                </select>
-            </div>
-
-            <!-- Phone Number Field -->
-            <div class="mb-3 d-flex">
-                <div class="input-group">
-                    <span class="input-group-text bg-light border-warning" style="border-width: 2px;">🇸🇦 +966</span>
-                    <input type="text" class="form-control border-warning" style="border-width: 2px;" placeholder="512345678">
+            <form id="loan-form">
+                <!-- Modal Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4 class="text-warning fw-bold">Register Loan Transaction</h4>
+                    <button type="button" class="btn-close" aria-label="Close"></button>
                 </div>
-            </div>
 
-            <!-- Loan Title Field -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Loan Title</label>
-                <input type="text" class="form-control border-warning" style="border-width: 2px;" placeholder="Enter loan title">
-            </div>
-
-            <!-- Loan Amount Field -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Loan Amount</label>
-                <div class="input-group">
-                    <input type="number" class="form-control border-warning" style="border-width: 2px;" value="0">
-                    <button class="btn btn-light border-warning" type="button"><i class="bi bi-chevron-up"></i></button>
-                    <button class="btn btn-light border-warning" type="button"><i class="bi bi-chevron-down"></i></button>
+                <!-- Select Type Dropdown -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Select Type</label>
+                    <select id="role" class="form-select border-warning" style="border-width: 2px;" aria-label="Select Type"
+                        required>
+                        <option value="BORROWER" selected>Borrower</option>
+                        <option value="LENDER">Lender</option>
+                    </select>
                 </div>
-            </div>
 
-            <!-- Date Field -->
-            <div class="mb-3">
-                <label class="form-label fw-bold">Date</label>
-                <div class="input-group">
-                    <input type="text" class="form-control border-warning" style="border-width: 2px;" placeholder="12/12/2020" aria-label="Date">
-                    <span class="input-group-text bg-light border-warning" style="border-width: 2px;">
-                        <i class="bi bi-calendar"></i>
-                    </span>
+                <!-- Phone Number Field -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Your friend's number</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-warning" style="border-width: 2px;">+966</span>
+                        <input type="tel" id="partyPhoneNumber" class="form-control border-warning"
+                            style="border-width: 2px;" placeholder="512345678" required pattern="[0-9]{9,12}">
+                    </div>
                 </div>
-            </div>
 
-            <!-- Notes Field -->
-            <div class="mb-4">
-                <label class="form-label fw-bold">Notes (optional)</label>
-                <textarea class="form-control border-warning" style="border-width: 2px;" rows="2"></textarea>
-            </div>
+                <!-- Loan Title Field -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Loan Title</label>
+                    <input type="text" id="title" class="form-control border-warning" style="border-width: 2px;"
+                        placeholder="Enter loan title" required>
+                </div>
 
-            <!-- Submit Button -->
-            <button type="button" class="btn btn-warning w-100 text-white" style="border-radius: 25px;">Submit</button>
+                <!-- Loan Amount Field -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Loan Amount</label>
+                    <div class="input-group">
+                        <input type="number" id="amount" class="form-control border-warning" style="border-width: 2px;" value="0"
+                            min="1" required>
+                    </div>
+                </div>
+
+                <!-- Date Field -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Date</label>
+                    <div class="input-group">
+                        <input type="date" id="date" class="form-control border-warning" style="border-width: 2px;"
+                            aria-label="Date" required>
+                    </div>
+                </div>
+
+                <!-- Notes Field -->
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Notes (optional)</label>
+                    <textarea id="notes" class="form-control border-warning" style="border-width: 2px;" rows="2"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-warning w-100 text-white"
+                    style="border-radius: 25px;">Submit</button>
+            </form>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+
+    <script type="module" src="js/loans.js"></script>
+
 </html>

@@ -25,10 +25,10 @@
 
         console.log(`${req.method} ${res.statusCode}
 ${startDate} ${req.originalUrl} ${duration}ms
-Request Headers: ${JSON.stringify(req.headers, null, 2)}
 Response Body: ${responseBody ? responseBody : '(empty)'}
-        `);
-    });
+`);
+});
+// Request Headers: ${JSON.stringify(req.headers, null, 2)}
 
     next();
 };

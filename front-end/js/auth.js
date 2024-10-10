@@ -6,7 +6,7 @@ async function register(fullName, phoneNumber, email, password) {
         console.log(data); // Log the response to see if the token is returned correctly
 
             localStorage.setItem('token', data.token); // If the API returns a token
-            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('user', JSON.stringify(data));
 
             loginUser(phoneNumber, password);
     } catch (error) {
@@ -30,7 +30,7 @@ async function loginUser(phoneNumber, password) {
 
         if (data.token) {
             localStorage.setItem('token', data.token); 
-            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('user', JSON.stringify(data));
             console.log('Login successful');
             window.location.href = './home-page.html';
         } else {

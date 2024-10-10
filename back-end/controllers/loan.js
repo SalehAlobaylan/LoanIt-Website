@@ -12,15 +12,23 @@ const createLoan = async (req, res, next) => {
     const { userId } = req.params;
     const { partyPhoneNumber, role, title, amount, date, notes } = req.body;
 
+    const partyPhoneNumberAltered = '966' + partyPhoneNumber.trim().slice(-9);
+    console.log('partyPhoneNumberAltered', partyPhoneNumberAltered);
+    console.log('userId', userId);
+    console.log('amount', amount);
+
     try {
-        const party = await User.findOne({ partyPhoneNumber });
+        const party = await User.findOne({ phoneNumber: partyPhoneNumberAltered });
+        console.log('party', party);
         if (!party) {
             sendError(res, 'AUTH_002');
+        } else if (party._id.toString() === userId) {
+            sendError(res, 'LOAN_009');
         }
 
         const loan = new Loan({ ownerId: userId, partyId: party._id, role, title, amount, date, notes });
         await loan.save();
-
+        res.status(201).json({ data: loan });
     } catch (error) {
         next(error);
     }
@@ -34,7 +42,7 @@ const getLoanById = async (req, res, next) => {
         if (!loan) {
             sendError(res, 'LOAN_008');
         }
-        res.json({ loan });
+        res.json({ data: loan });
     } catch (error) {
         next(error);
     }
@@ -48,8 +56,10 @@ const getLoans = async (req, res, next) => {
         if (!loans) {
             sendError(res, 'LOAN_008');
         }   
-        res.json({ loans });
+        res.json({ data: loans });
     } catch (error) {
         next(error);
     }
 }
+
+module.exports = { createLoan, getLoanById, getLoans };

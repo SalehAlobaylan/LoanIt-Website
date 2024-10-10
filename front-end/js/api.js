@@ -30,6 +30,10 @@ function getToken() {
     return localStorage.getItem('token');
 }
 
+function getUserId() {
+    return localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user'))._id : null;
+}
+
 function getHeaders() {
     const headers = { 'Content-Type': 'application/json' };
     const token = getToken();
@@ -111,4 +115,5 @@ export const api = {
     requireAuth,
     isAuthenticated,
     logout,
+    getUserId,
 };

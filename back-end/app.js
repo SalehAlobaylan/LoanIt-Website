@@ -5,6 +5,7 @@ const cors = require('cors');
 const connectDB = require('./db');
 const logger = require('./utils/logger');
 const authRouter = require('./routes/auth');
+const loansRouter = require('./routes/loans')
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use(logger);
 
 app.use('/auth', authRouter);
+app.use('/user/:userId/loans', loansRouter);
 
 app.get('/', (req, res) => {
     res.send('Hellasdfo World!');

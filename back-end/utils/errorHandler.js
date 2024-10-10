@@ -34,6 +34,7 @@ const errorCodes = {
     LOAN_006: { message: "Loan update failed", icon: "LOAN", status: 400 },
     LOAN_007: { message: "Loan deletion failed", icon: "LOAN", status: 400 },
     LOAN_008: { message: "No loan found", icon: "LOAN", status: 400 },
+    LOAN_009: { message: "You can't create a loan for yourself", icon: "LOAN", status: 400 },
 
     // Database Errors (DB)
     DB_001: { message: "Database connection failed", icon: "SERVER", status: 500 },
