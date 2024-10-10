@@ -32,7 +32,7 @@ async function loginUser(phoneNumber, password) {
             localStorage.setItem('token', data.token); 
             localStorage.setItem('user', JSON.stringify(data.user));
             console.log('Login successful');
-            window.location.href = './home_page.html';
+            window.location.href = './home-page.html';
         } else {
             throw new Error('No token received from server');
         }
@@ -51,6 +51,6 @@ document.getElementById('login-form')?.addEventListener('submit', function(event
 
 document.addEventListener('DOMContentLoaded', function () {
     if (api.isAuthenticated()) {
-        window.location.href = 'home_page.html';
+        window.location.href = 'home-page.html';
     }
 })
