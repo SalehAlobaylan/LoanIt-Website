@@ -1,3 +1,5 @@
+import { sign } from "crypto";
+
 const BASE_URL = window.location.origin.includes('127.0.0.1') || window.location.origin.includes('localhost')
     ? 'http://localhost:5010' // Development API URL (e.g., running locally)
     : "https://apiloanit.saudmt.com";  // Use current domain for production/staging
@@ -22,7 +24,7 @@ function isAuthenticated() {
 
 function requireAuth() {
     if (!isAuthenticated()) {
-        window.location.href = 'login.html';
+        logout();
     }
 }
 
@@ -111,7 +113,7 @@ async function request(endpoint, { method = 'GET', body = null } = {}) {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = './login.html';
+    window.location.href = 'login.html';
 }
 
 export const api = {
