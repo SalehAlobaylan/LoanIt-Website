@@ -16,8 +16,9 @@ const iconMap = {
 };
 
 function isAuthenticated() {
-    const token = localStorage.getItem('token');
-    return token !== null;
+    const token = getToken();
+    const userId = getUserId();
+    return token !== null || userId !== null;
 }
 
 function requireAuth() {
