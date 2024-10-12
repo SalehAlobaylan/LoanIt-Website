@@ -113,7 +113,7 @@ async function request(endpoint, { method = 'GET', body = null } = {}) {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    window.location.href = 'login.html';
+    window.location.href = './login.html';
 }
 
 export const api = {
