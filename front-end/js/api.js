@@ -16,9 +16,8 @@ const iconMap = {
 };
 
 function isAuthenticated() {
-    const token = getToken();
-    const userId = getUserId();
-    return token !== null || userId !== null;
+    const user = getUser();
+    return user !== null && user._id && user.token;
 }
 
 function requireAuth() {
@@ -27,12 +26,19 @@ function requireAuth() {
     }
 }
 
+function getUser() {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+}
+
 function getToken() {
-    return localStorage.getItem('token');
+    const user = getUser();
+    return user ? user.token : null;
 }
 
 function getUserId() {
-    return localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user'))._id : null;
+    const user = getUser();
+    return user ? user._id : null;
 }
 
 function getHeaders() {
