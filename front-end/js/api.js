@@ -1,5 +1,3 @@
-import { sign } from "crypto";
-
 const BASE_URL = window.location.origin.includes('127.0.0.1') || window.location.origin.includes('localhost')
     ? 'http://localhost:5010' // Development API URL (e.g., running locally)
     : "https://apiloanit.saudmt.com";  // Use current domain for production/staging
