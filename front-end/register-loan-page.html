@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,105 +12,135 @@
             background-color: #f7f7f7;
         }
 
-        /* Styling for the container card */
-        .card {
-            border: none;
-            border-radius: 25px;
-        }
-
         /* Custom styles for form controls */
         .form-control,
         .input-group-text,
         .form-select {
             border-radius: 10px;
+            border-width: 2px;
+            border-color: #e0e0e0; /* Default border color */
+        }
+
+        .form-control:focus,
+        .input-group-text:focus,
+        .form-select:focus {
+            border-color: #FFAE38 !important; /* Yellow border when selected */
+            box-shadow: none; /* Remove Bootstrap box shadow */
+        }
+
+        .input-group-text {
+            background-color: #f7f7f7;
         }
 
         /* Custom button style for submit button */
         .btn-warning {
-            background: linear-gradient(90deg, rgba(255, 167, 38, 1) 0%, rgba(255, 196, 0, 1) 100%);
+            background-color: #e0e0e0;
+            
             border: none;
         }
 
-        /* Adjust border styles */
-        .border-warning {
-            border-color: #FFAE38 !important;
+        /* Custom icon for SAR currency */
+        .sar-icon {
+            background: url('sar-icon.png') no-repeat;
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+        }
+
+        /* Align phone number prefix */
+        .input-group-text i {
+            font-size: 20px;
+        }
+
+        /* Text adjustments for the form */
+        label {
+            font-weight: bold;
+        }
+
+        /* Modal styles */
+        .modal-content {
+            border-radius: 25px;
         }
     </style>
 </head>
-
 <body>
 
+    <!-- Trigger Button for Modal -->
     <div class="container d-flex justify-content-center align-items-center vh-100">
-        <!-- Register Loan Transaction Modal/Container -->
-        <div class="card shadow p-4" style="border-radius: 25px; max-width: 450px;">
-            <form id="loan-form">
-                <!-- Modal Header -->
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h4 class="text-warning fw-bold">Register Loan Transaction</h4>
-                    <button type="button" class="btn-close" aria-label="Close"></button>
-                </div>
+        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#loanModal">+ Create new</button>
+    </div>
 
-                <!-- Select Type Dropdown -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Select Type</label>
-                    <select id="role" class="form-select border-warning" style="border-width: 2px;" aria-label="Select Type"
-                        required>
-                        <option value="BORROWER" selected>Borrower</option>
-                        <option value="LENDER">Lender</option>
-                    </select>
+    <!-- Modal -->
+    <div class="modal fade" id="loanModal" tabindex="-1" aria-labelledby="loanModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title text-warning fw-bold" id="loanModalLabel">Register Loan Transaction</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    <!-- Form Content -->
+                    <div class="mb-3">
+                        <label class="form-label">Your friend's number</label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="border-width: 2px;">
+                                <i class="bi bi-telephone">🇸🇦 +966</i>
+                            </span>
+                            <input type="text" class="form-control" placeholder="512345678">
+                        </div>
+                    </div>
 
-                <!-- Phone Number Field -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Your friend's number</label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-warning" style="border-width: 2px;">+966</span>
-                        <input type="tel" id="partyPhoneNumber" class="form-control border-warning"
-                            style="border-width: 2px;" placeholder="512345678" required pattern="[0-9]{9,12}">
+                    <!-- He/She is Field -->
+                    <div class="mb-3">
+                        <label class="form-label">He/She is</label>
+                        <select class="form-select">
+                            <option selected>Borrower</option>
+                            <option value="1">Lender</option>
+                        </select>
+                    </div>
+
+                    <!-- Loan Title Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Loan Title</label>
+                        <input type="text" class="form-control" placeholder="Need money for ...">
+                    </div>
+
+                    <!-- Loan Amount Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Loan Amount</label>
+                        <div class="input-group loan-amount-input-group">
+                            <input type="number" class="form-control" value="1500">
+                            <span class="input-group-text">
+                                <i class="sar-icon"></i>SAR
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Date Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="2024/10/13">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Notes Field -->
+                    <div class="mb-4">
+                        <label class="form-label">Notes (optional)</label>
+                        <textarea class="form-control" rows="2" placeholder="Notes about the loan"></textarea>
                     </div>
                 </div>
-
-                <!-- Loan Title Field -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Loan Title</label>
-                    <input type="text" id="title" class="form-control border-warning" style="border-width: 2px;"
-                        placeholder="Enter loan title" required>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning w-100 text-white" style="border-radius: 25px;">Submit</button>
                 </div>
-
-                <!-- Loan Amount Field -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Loan Amount</label>
-                    <div class="input-group">
-                        <input type="number" id="amount" class="form-control border-warning" style="border-width: 2px;" value="0"
-                            min="1" required>
-                    </div>
-                </div>
-
-                <!-- Date Field -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Date</label>
-                    <div class="input-group">
-                        <input type="date" id="date" class="form-control border-warning" style="border-width: 2px;"
-                            aria-label="Date" required>
-                    </div>
-                </div>
-
-                <!-- Notes Field -->
-                <div class="mb-4">
-                    <label class="form-label fw-bold">Notes (optional)</label>
-                    <textarea id="notes" class="form-control border-warning" style="border-width: 2px;" rows="2"></textarea>
-                </div>
-
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-warning w-100 text-white"
-                    style="border-radius: 25px;">Submit</button>
-            </form>
+            </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script type="module" src="js/loans.js"></script>
-
+</body>
 </html>
