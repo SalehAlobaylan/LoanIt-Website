@@ -1,4 +1,5 @@
 const Loan = require('../datamodels/Loan');
+const Transaction = require('../datamodels/Transaction');
 const User = require('../datamodels/User');
 const { sendError } = require('../utils/errorHandler');
 
@@ -28,6 +29,8 @@ const createLoan = async (req, res, next) => {
 
         const loan = new Loan({ ownerId: userId, partyId: party._id, role, title, amount, date, notes });
         await loan.save();
+        const transaction = new Transaction({ createdBy: userId, loanId: loan._id, type: 'INCREASE', amount, date, notes });
+        await transaction.save();
         res.status(201).json({ data: loan });
     } catch (error) {
         next(error);
