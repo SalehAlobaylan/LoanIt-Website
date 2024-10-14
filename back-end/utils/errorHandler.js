@@ -35,6 +35,10 @@ const errorCodes = {
     LOAN_007: { message: "Loan deletion failed", icon: "LOAN", status: 400 },
     LOAN_008: { message: "No loan found", icon: "LOAN", status: 400 },
     LOAN_009: { message: "You can't create a loan for yourself", icon: "LOAN", status: 400 },
+    LOAN_010: { message: "Loan can't be approved", icon: "LOAN", status: 400 },
+    LOAN_011: { message: "Loan can't be rejected", icon: "LOAN", status: 400 },
+    LOAN_012: { message: "You can't approve this loan", icon: "LOAN", status: 400 },
+    LOAN_013: { message: "Invalid status change", icon: "LOAN", status: 400 },
 
     // Database Errors (DB)
     DB_001: { message: "Database connection failed", icon: "SERVER", status: 500 },
@@ -46,7 +50,8 @@ const errorCodes = {
     TRANS_002: { message: "Invalid transaction type", icon: "TRANSACTION", status: 400 },
     TRANS_003: { message: "Transaction update failed", icon: "TRANSACTION", status: 400 },
     TRANS_004: { message: "Transaction deletion failed", icon: "TRANSACTION", status: 400 },
-    TRANS_005: { message: "Invalid transaction amount", icon: "TRANSACTION", status: 400 }
+    TRANS_005: { message: "Invalid transaction amount", icon: "TRANSACTION", status: 400 },
+    TRANS_006: { message: "Transactions not found", icon: "TRANSACTION", status: 404 },
 };
 
 

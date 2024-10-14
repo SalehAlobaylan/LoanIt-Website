@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link rel="icon" href="/resources/TitiledLogo-removebg-preview.png" type="image/icon type">
 
 </head>
+
 <body>
 
     <div class="container mt-4">
@@ -36,181 +38,85 @@
 
         <!-- Loans Section -->
         <h2 id="Loans" class="text-warning">Your Loans</h2>
-        <div class="card-container">
-            <!-- Loan Card 1 -->
+        <div class="card-container" id="loan-list">
+            <!-- Loan Card 1
             <div class="card my-2">
-                <!-- <div style="background-color: red; width: 5px ;height: 50px;"></div> -->
+                 <div style="background-color: red; width: 5px ;height: 50px;"></div>
                 <div style="border-left: 1rem solid red; border-radius: 1rem;" class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
-                        <div> 
+                        <div>
                             <h5 class="card-title">To pay my bills</h5>
                             <p class="card-subtitle text-muted">Saleh Alobaylan</p>
-                        </div> 
+                        </div>
                         <div>
-                            <img style="transform: rotate(180deg); padding-left: 5px;" src="/resources/triangle-fill.svg" alt="">
+                            <img style="transform: rotate(180deg); padding-left: 5px;"
+                                src="/resources/triangle-fill.svg" alt="">
                             <span class="badge bg-warning rounded-pill ">Active</span>
-                        </div> 
+                        </div>
                     </div>
                     <div class="progress my-2">
                         <div class="progress-bar bg-danger" style="width: 64.5%;">6450 SAR</div>
-                    </div> <div style="float: right;">10000</div>
+                    </div>
+                    <div style="float: right;">10000</div>
                     <p class="text-muted">Initiated 2024/10/03</p>
                 </div>
-            </div>
-            <!-- Loan Card 2 -->
-            <div class="card my-2">
-                <div style="border-left: 1rem solid red; border-radius: 1rem;" class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Wanted to buy something</h5>
-                            <p class="card-subtitle text-muted">Nawaf</p>
-                        </div>
-                        <div>
-                            <img style="transform: rotate(180deg); padding-left: 5px;" src="/resources/triangle-fill.svg" alt="">
-                            <span style="background-color: orange;" class="badge  rounded-pill ">Pending</span>
-                        </div> 
-                    </div> 
-                    <div class="progress my-2">
-                        <div class="progress-bar bg-secondary" style="width: 0%;">0 SAR</div>
-                    </div> <div style="float: right;">3500</div>
-                    <p class="text-muted">Initiated 2024/10/03</p>
-                </div>
-            </div>
-            <!-- Loan Card 3 -->
-            <div class="card my-2">
-                <div style="border-left: 1rem solid green; border-radius: 1rem;" class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Emergency</h5>
-                            <p class="card-subtitle text-muted">Saud</p>
-                        </div>
-                        <div>
-                            <img style=" padding-left: 5px;" src="/resources/triangle-fill-green.svg" alt="">
-                            <span class="badge rounded-pill bg-success">Settled</span>
-                        </div>                         </div>
-                    <div class="progress my-2">
-                        <div class="progress-bar bg-success" style="width: 100%;">1000 SAR</div>
-                    </div> <div style="float: right;">1000</div>
-                    <p class="text-muted">Initiated 2024/10/03</p>
-                </div>
-            </div>
-            <!-- Loan Card 3 -->
-            <div class="card my-2">
-                <div style="border-left: 1rem solid green; border-radius: 1rem;" class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Emergency</h5>
-                            <p class="card-subtitle text-muted">Saud</p>
-                        </div>
-                        <div>
-                            <img style=" padding-left: 5px;" src="/resources/triangle-fill-green.svg" alt="">
-                            <span class="badge rounded-pill bg-success">Settled</span>
-                        </div>                         </div>
-                    <div class="progress my-2">
-                        <div class="progress-bar bg-success" style="width: 100%;">1000 SAR</div>
-                    </div> <div style="float: right;">1000</div>
-                    <p class="text-muted">Initiated 2024/10/03</p>
-                </div>
-            </div>
-            <!-- Loan Card 3 -->
-            <div class="card my-2">
-                <div style="border-left: 1rem solid green; border-radius: 1rem;" class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Emergency</h5>
-                            <p class="card-subtitle text-muted">Saud</p>
-                        </div>
-                        <div>
-                            <img style=" padding-left: 5px;" src="/resources/triangle-fill-green.svg" alt="">
-                            <span class="badge rounded-pill bg-success">Settled</span>
-                        </div>                         </div>
-                    <div class="progress my-2">
-                        <div class="progress-bar bg-success" style="width: 100%;">1000 SAR</div>
-                    </div> <div style="float: right;">1000</div>
-                    <p class="text-muted">Initiated 2024/10/03</p>
-                </div>
-            </div>
-            <!-- Loan Card 3 -->
-            <div class="card my-2">
-                <div style="border-left: 1rem solid green; border-radius: 1rem;" class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Emergency</h5>
-                            <p class="card-subtitle text-muted">Saud</p>
-                        </div>
-                        <div>
-                            <img style=" padding-left: 5px;" src="/resources/triangle-fill-green.svg" alt="">
-                            <span class="badge rounded-pill bg-success">Settled</span>
-                        </div>                         </div>
-                    <div class="progress my-2">
-                        <div class="progress-bar bg-success" style="width: 100%;">1000 SAR</div>
-                    </div> <div style="float: right;">1000</div>
-                    <p class="text-muted">Initiated 2024/10/03</p>
-                </div>
-            </div>
-            <!-- Loan Card 3 -->
-            <div class="card my-2">
-                <div style="border-left: 1rem solid green; border-radius: 1rem;" class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="card-title">Emergency</h5>
-                            <p class="card-subtitle text-muted">Saud</p>
-                        </div>
-                        <div>
-                            <img style=" padding-left: 5px;" src="/resources/triangle-fill-green.svg" alt="">
-                            <span class="badge rounded-pill bg-success">Settled</span>
-                        </div>                         </div>
-                    <div class="progress my-2">
-                        <div class="progress-bar bg-success" style="width: 100%;">1000 SAR</div>
-                    </div> <div style="float: right;">1000</div>
-                    <p class="text-muted">Initiated 2024/10/03</p>
-                </div>
-            </div>
+            </div> -->
         </div>
+        <div id="modal-container"></div>
     </div>
-            
-        
 
-<!-- Footer Navigation -->
-<footer class="fixed-bottom bg-warning py-2 footer-container">
-    <div class="container">
-        <div class="d-flex justify-content-around">
-            <!-- Home Icon & Text -->
-            <div class="text-center">
-                <img  class="img" src="/resources/TNMWCH01.svg">
+
+
+    <!-- Footer Navigation -->
+    <footer class="fixed-bottom bg-warning py-2 footer-container">
+        <div class="container">
+            <div class="d-flex justify-content-around">
+                <!-- Home Icon & Text -->
+                <div class="text-center">
+                    <img class="img" src="/resources/TNMWCH01.svg">
 
                     <i class="bi bi-house-door-fill"></i>
                     <!-- <p>Home</p> -->
-                </a>
-            </div>
-            <!-- Loans Icon & Text -->
-            <div class="text-center">
-                <a href="#loans" class="text-decoration-none text-dark">
-                    <i class="bi bi-wallet-fill"></i>
-                    <button type="button" class="btn ">Loans</button>
-                </a>
-            </div>
-            <!-- Profile Icon & Text -->
-            <div class="text-center">
-                <a href="#profile" class="text-decoration-none text-dark">
-                    <i class="bi bi-person-fill"></i>
-                    <button type="button" class="btn ">Profile</button>
-                </a>
-            </div>
-            <!-- Profile Icon & Text -->
-            <div class="text-center">
-                <a href="#profile" class="text-decoration-none text-dark">
-                    <i class="bi bi-person-fill"></i>
-                    <button type="button" id="signout" class="btn ">sign out TEMP</button>
-                </a>
+                    </a>
+                </div>
+                <!-- Loans Icon & Text -->
+                <div class="text-center">
+                    <a href="#loans" class="text-decoration-none text-dark">
+                        <i class="bi bi-wallet-fill"></i>
+                        <button type="button" class="btn ">Loans</button>
+                    </a>
+                </div>
+                <!-- Profile Icon & Text -->
+                <div class="text-center">
+                    <a href="#profile" class="text-decoration-none text-dark">
+                        <i class="bi bi-person-fill"></i>
+                        <button type="button" class="btn ">Profile</button>
+                    </a>
+                </div>
+                <!-- Profile Icon & Text -->
+                <div class="text-center">
+                    <a href="#profile" class="text-decoration-none text-dark">
+                        <i class="bi bi-person-fill"></i>
+                        <button type="button" id="signout" class="btn ">sign out TEMP</button>
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="js/home_page.js"></script>
+    <script>
+        // Dynamically load modal content into the modal-container div
+        fetch('register-loan-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modal-container').innerHTML = html;
+            })
+            .catch(err => console.warn('Error loading modal:', err));
+    </script>
 </body>
+
 </html>

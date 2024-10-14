@@ -12,3 +12,5 @@ const TransactionSchema = new Schema({
     notes: { type: String }
 
 })
+
+module.exports = mongoose.model('Transaction', TransactionSchema);

@@ -1,0 +1,91 @@
+<!-- Modal Trigger Button -->
+<div class="container d-flex justify-content-center align-items-center">
+    <button type="button" class="btn btn-create-loan w-100" data-bs-toggle="modal" data-bs-target="#loanModal">
+        + Create new
+    </button>
+</div>
+
+<style>
+    .btn-create-loan {
+        background:#eeeded; /* Grey to white gradient */
+        border: none;
+        border-radius: 15px;
+        color: black;
+        font-size: 1.2rem;
+        padding: 0.75rem;
+        transition: background 0.3s ease; /* Smooth transition for hover */
+    }
+
+    .btn-create-loan:hover {
+        background: linear-gradient(to right, #c0c0c0, #f8f9fa); /* Slightly darker grey on hover */
+    }
+</style>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="loanModal" tabindex="-1" aria-labelledby="loanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-warning fw-bold" id="loanModalLabel">Register Loan Transaction</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="loan-form">
+                <div class="modal-body">
+                    <!-- Form Content -->
+                    <div class="mb-3">
+                        <label class="form-label">Your friend's number</label>
+                        <div class="input-group">
+                            <span class="input-group-text" style="border-width: 2px;">
+                                <i class="bi bi-telephone">🇸🇦 +966</i>
+                            </span>
+                            <input type="text" id="partyPhoneNumber" class="form-control" placeholder="512345678">
+                        </div>
+                    </div>
+
+                    <!-- He/She is Field -->
+                    <div class="mb-3">
+                        <label class="form-label">He/She is</label>
+                        <select id="role" class="form-select">
+                            <option selected value="BORROWER">Borrower</option>
+                            <option value="LENDER">Lender</option>
+                        </select>
+                    </div>
+
+                    <!-- Loan Title Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Loan Title</label>
+                        <input type="text" id="title" class="form-control" placeholder="Need money for ...">
+                    </div>
+
+                    <!-- Loan Amount Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Loan Amount</label>
+                        <div class="input-group loan-amount-input-group">
+                            <input type="number" id="amount" class="form-control" value="1500">
+                            <span class="input-group-text">
+                                <i class="sar-icon"></i>SAR
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Date Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <div class="input-group">
+                            <input type="date" id="date" class="form-control" placeholder="2024/10/13">
+                        </div>
+                    </div>
+
+                    <!-- Notes Field -->
+                    <div class="mb-4">
+                        <label class="form-label">Notes (optional)</label>
+                        <textarea id="notes" class="form-control" rows="2" placeholder="Notes about the loan"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning w-100 text-white" style="border-radius: 25px;">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

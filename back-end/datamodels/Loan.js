@@ -5,6 +5,7 @@ const LoanSchema = new Schema({
 
     ownerId: { type: String, required: true },
     partyId: { type: String, required: true },
+    partyName: { type: String },
 
     role: { type: String, enum: ['BORROWER', 'LENDER'], required: true },
 
@@ -13,6 +14,12 @@ const LoanSchema = new Schema({
     date: { type: Date, default: Date.now, required: true },
     
     notes: { type: String }, 
+
+    status: { 
+        type: String, 
+        enum: ['PENDING', 'ACTIVE', 'SETTLED', 'REJECTED'], 
+        default: 'PENDING'  // Default status is Pending
+    },
 
     createdAt: { type: Date, default: Date.now }, 
 });
