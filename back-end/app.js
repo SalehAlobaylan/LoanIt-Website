@@ -8,6 +8,8 @@ const connectDB = require('./db');
 const logger = require('./utils/logger');
 const authRouter = require('./routes/auth');
 const loansRouter = require('./routes/loans')
+const morgan = require('morgan');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,7 +19,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-app.use(logger);
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use(express.static(path.join(__dirname, 'home-page')));
 app.use('/auth', authRouter);

@@ -23,6 +23,22 @@ body {
     flex-wrap: wrap;                   /*(Here the secret of Cards positions)*/
     justify-content: center;
 }
+
+.card-borrower {
+    border-left: 1rem solid #FF4500; 
+    border-radius: 1rem;
+}
+
+.card-lender {
+    border-left: 1rem solid #32CD32; 
+    border-radius: 1rem;
+}
+
+.card-disabled {
+    border-left: 1rem solid #808080; 
+    border-radius: 1rem;
+}
+
 h2 {
     font-weight: bold;
 }

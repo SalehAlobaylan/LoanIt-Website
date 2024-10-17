@@ -1,12 +1,8 @@
 import { api } from './api.js';
-// import { getAllLoans } from './loans.js';
 
-document.addEventListener('DOMContentLoaded', function() {            // comment this function to pass auth for testing
-    api.requireAuth(); // Redirect to login if the user is not authenticated
+document.addEventListener('DOMContentLoaded', function() {
+    api.requireAuth(); 
 });
-
-
-// id signout
 
 const signout = document.getElementById('signout');
 if (signout) {
@@ -16,49 +12,69 @@ if (signout) {
     });
 }
 
-async function getAllLoans() {
-    try {
-        const userId = api.getUserId();
-        const response = await api.get(`/user/${userId}/loans`);
-        const loans = response.data; // assuming the API response has loans in the 'data' key
+// Helper function to determine the color based on the loan status
+function getStatusColor(status) {
+    const statusColors = {
+        'ACTIVE': '#FFD700',      // Gold
+        'SETTLED': '#32CD32',     // LimeGreen
+        'PENDING': '#FF8C00',     // DarkOrange
+        'OVERDUE': '#FF4500',     // OrangeRed
+        'CANCELED': '#A9A9A9'     // DarkGray
+    };
+    return statusColors[status] || '#A9A9A9'; // Default to DarkGray if status is unknown
+}
 
-        // Get the container where loan cards will be inserted
-        const loanList = document.getElementById('loan-list');
+// Helper function to render a loan card
+function renderLoanCard(loan, userId) {
+    const { _id, title, ownerId, ownerName, partyId, partyName, role, status, totalPaid, totalAmount, date } = loan;
 
-        // Clear any existing loans (if reloading)
-        loanList.innerHTML = '';
+    const otherPartyName = (userId === ownerId) ? partyName : ownerName;
+    const userRole = (userId === partyId) ? role : (role === 'BORROWER' ? 'LENDER' : 'BORROWER');
+    const formattedDate = new Date(date).toLocaleDateString('en-GB');
+    const progressPercentage = ((totalPaid / totalAmount) * 100).toFixed(1);
 
-        // Loop through the loans and create HTML for each loan
-        loans.forEach(loan => {
-            const { _id, title, partyName, role, status, amount, date, notes } = loan;
+    const statusColor = getStatusColor(status);
+    const cardClass = status === 'PENDING' ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
 
-            // Format date
-            const formattedDate = new Date(date).toLocaleDateString('en-GB');
-
-            // Create a loan card dynamically
-            const loanCard = `
-                <div class="card my-2">
-                    <div style="border-left: 1rem solid ${status === 'ACTIVE' ? 'green' : status === 'PENDING' ? 'orange' : 'red'}; border-radius: 1rem;" class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5 class="card-title">${title}</h5>
-                                <p class="card-subtitle text-muted">${partyName}</p>
-                            </div>
-                            <div>
-                                <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
-                                <span class="badge ${status === 'ACTIVE' ? 'bg-warning' : 'bg-secondary'} rounded-pill">${status}</span>
-                            </div>
-                        </div>
-                        <div class="progress my-2">
-                            <div class="progress-bar bg-danger" style="width: ${amount}%;"></div>
-                        </div>
-                        <p class="text-muted">Initiated ${formattedDate}</p>
+    return `
+        <div class="card my-2">
+            <div class="card-body ${cardClass}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">${title}</h5>
+                        <p class="card-subtitle text-muted">${otherPartyName}</p>
+                    </div>
+                    <div>
+                        <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
+                        <span class="badge ${status === 'ACTIVE' ? 'bg-warning' : 'bg-secondary'} rounded-pill">${status}</span>
                     </div>
                 </div>
-            `;
+                <div class="progress my-2">
+                    <div class="progress-bar bg-danger" style="width: ${progressPercentage}%;"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span>${totalPaid} SAR</span>
+                    <span>${totalAmount} SAR</span>
+                </div>
+                <p class="text-muted">Initiated ${formattedDate}</p>
+            </div>
+        </div>
+    `;
+}
 
-            // Append the loan card to the loan list
-            loanList.insertAdjacentHTML('beforeend', loanCard);
+// Main function to fetch loans and render them
+async function getAllLoans() {
+    try {
+        const userId = api.getUserId();  // Get current user's ID
+        const response = await api.get(`/user/${userId}/loans`);
+        const loans = response.data;
+        const loanList = document.getElementById('loan-list');
+
+        loanList.innerHTML = ''; // Clear existing loans
+
+        loans.forEach(loan => {
+            const loanCardHTML = renderLoanCard(loan, userId);
+            loanList.insertAdjacentHTML('beforeend', loanCardHTML);
         });
 
     } catch (error) {
