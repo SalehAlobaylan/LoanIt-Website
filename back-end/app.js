@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const express = require('express');
+const path = require('path'); // Add this to resolve paths correctly
+
 const cors = require('cors');
 const connectDB = require('./db');
 const logger = require('./utils/logger');
@@ -17,6 +19,7 @@ app.use(express.json());
 
 app.use(logger);
 
+app.use(express.static(path.join(__dirname, 'home-page')));
 app.use('/auth', authRouter);
 app.use('/user/:userId/loans', loansRouter);
 
