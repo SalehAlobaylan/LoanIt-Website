@@ -1,13 +1,10 @@
 import { api } from './api.js';
-// import { getAllLoans } from './loans.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     api.requireAuth(); // Redirect to login if the user is not authenticated
 });
 
-
-// id signout
-
+// Handle sign out
 const signout = document.getElementById('signout');
 if (signout) {
     signout.addEventListener('click', function(event) {
@@ -18,9 +15,9 @@ if (signout) {
 
 async function getAllLoans() {
     try {
-        const userId = api.getUserId();
+        const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
-        const loans = response.data; // assuming the API response has loans in the 'data' key
+        const loans = response.data; // Assuming the API response has loans in the 'data' key
 
         // Get the container where loan cards will be inserted
         const loanList = document.getElementById('loan-list');
@@ -30,7 +27,13 @@ async function getAllLoans() {
 
         // Loop through the loans and create HTML for each loan
         loans.forEach(loan => {
-            const { _id, title, partyName, role, status, amount, date, notes } = loan;
+            const { _id, title, ownerId, ownerName, partyId, partyName, role, status, date, notes } = loan;
+
+            // Determine the other party's name based on the current user
+            const otherPartyName = (userId === ownerId) ? partyName : ownerName;
+
+            // Determine if the user is the borrower or lender
+            const userRole = (userId === partyId) ? role : (role === 'BORROWER' ? 'LENDER' : 'BORROWER');
 
             // Format date
             const formattedDate = new Date(date).toLocaleDateString('en-GB');
@@ -42,15 +45,12 @@ async function getAllLoans() {
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <h5 class="card-title">${title}</h5>
-                                <p class="card-subtitle text-muted">${partyName}</p>
+                                <p class="card-subtitle text-muted">${otherPartyName}</p>
                             </div>
                             <div>
                                 <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
                                 <span class="badge ${status === 'ACTIVE' ? 'bg-warning' : 'bg-secondary'} rounded-pill">${status}</span>
                             </div>
-                        </div>
-                        <div class="progress my-2">
-                            <div class="progress-bar bg-danger" style="width: ${amount}%;"></div>
                         </div>
                         <p class="text-muted">Initiated ${formattedDate}</p>
                     </div>
