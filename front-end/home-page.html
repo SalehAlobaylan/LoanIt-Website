@@ -15,26 +15,15 @@
 
     <div class="container mt-4">
 
-        <!-- Notifications Section -->
-        <h2 class="text-warning">Notifications</h2>
-        <div class="card my-2">
-            <div class="card-body-note d-flex justify-content-between align-items-center">
-                <div>
-                    <span class="badge bg-success">Lend Request</span>
-                    <p>Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.</p>
-                </div>
-                <button class="btn btn-warning">Review</button>
-            </div>
-        </div>
-        <div class="card my-2">
-            <div class="card-body-note d-flex justify-content-between align-items-center">
-                <div>
-                    <span class="badge bg-danger">Borrow Request</span>
-                    <p>Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.</p>
-                </div>
-                <button class="btn btn-warning">Review</button>
-            </div>
-        </div>
+       
+    <!-- Notifications Section -->
+    <h2 class="text-warning">Notifications</h2>
+    <div id="notification-list">
+        <!-- Notifications will be dynamically added here -->
+    </div>
+    <!-- <button id="clear-notifications" class="btn btn-danger">Clear All Notifications</button> -->
+
+        <!-- </div> -->
 
         <!-- Loans Section -->
         <h2 id="Loans" class="text-warning">Your Loans</h2>
@@ -73,7 +62,7 @@
             <div class="d-flex justify-content-around">
                 <!-- Home Icon & Text -->
                 <div class="text-center">
-                    <img class="img" src="/resources/TNMWCH01.svg">
+                    <img class="img" src="/front-end/resources/TNMWCH01.svg">
 
                     <i class="bi bi-house-door-fill"></i>
                     <!-- <p>Home</p> -->

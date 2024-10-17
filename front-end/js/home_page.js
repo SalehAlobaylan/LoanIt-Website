@@ -1,7 +1,7 @@
 import { api } from './api.js';
 // import { getAllLoans } from './loans.js';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {            // comment this function to pass auth for testing
     api.requireAuth(); // Redirect to login if the user is not authenticated
 });
 
@@ -65,6 +65,82 @@ async function getAllLoans() {
         console.error('Error getting loans:', error.message);
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    const notificationList = document.getElementById('notification-list');
+    const clearNotificationsBtn = document.getElementById('clear-notifications');
+
+    // Example Notifications Data (loanId will be needed)
+    const notifications = [
+        { loanId: 1, type: 'Lend Request', message: 'Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.', badgeClass: 'bg-success' },
+        { loanId: 2, type: 'Borrow Request', message: 'Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.', badgeClass: 'bg-danger' }
+    ];
+
+    // Function to create and append notifications
+    function loadNotifications() {
+        notifications.forEach(notification => {
+            const notificationCard = document.createElement('div');
+            notificationCard.classList.add('card', 'my-2');
+
+            notificationCard.innerHTML = `
+                <div class="card-body-note d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="badge ${notification.badgeClass}">${notification.type}</span>
+                        <p>${notification.message}</p>
+                    </div>
+                    <button class="btn btn-success" onclick="handleLoanAction(${notification.loanId}, 'approve')">Accept</button>
+                    <button class="btn btn-danger" onclick="handleLoanAction(${notification.loanId}, 'reject')">Reject</button>
+                </div>
+            `;
+
+            notificationList.appendChild(notificationCard);
+        });
+    }
+
+    // Function to handle Accept/Reject action
+    window.handleLoanAction = function(loanId, status) {
+        const requestOptions = {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status })
+        };
+        
+
+        fetch(`/loans/${loanId}`, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    console.error('Error updating loan:', data.error);
+                } else {
+                    alert(`Loan has been ${status === 'approve' ? 'approved' : 'rejected'} successfully!`);
+                    // Optionally, you can remove the notification after action
+                    removeNotificationCard(loanId);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Remove notification card after action
+    function removeNotificationCard(loanId) {
+        const notificationCards = document.querySelectorAll('.card');
+        notificationCards.forEach(card => {
+            if (card.innerHTML.includes(`handleLoanAction(${loanId}`)) {
+                card.remove();
+            }
+        });
+    }
+
+    // Clear all notifications
+    clearNotificationsBtn.addEventListener('click', function() {
+        notificationList.innerHTML = ''; // Clear all notifications
+    });
+
+    // Load notifications when the page loads
+    loadNotifications();
+});
+
 
 // Call getAllLoans on page load
 window.onload = getAllLoans;
