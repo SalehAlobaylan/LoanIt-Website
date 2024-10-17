@@ -126,7 +126,10 @@ async function getLoansByUserId(userId) {
             return [];
         }
 
-        for (let loan of loans) {
+        const modifiedLoans = [];
+
+        for (let loanDoc of loans) {
+            let loan = loanDoc.toObject();
             const transactions = await getTransactionsByLoanId(loan._id);
             loan.transactions = transactions;
             const amounts = calculateAmounts(transactions);
@@ -134,9 +137,11 @@ async function getLoansByUserId(userId) {
             loan.totalPaid = amounts.totalPaid;
             loan.remainingAmount = amounts.remainingAmount;
             loan.status = getLoanStatus(loan);
+
+            modifiedLoans.push(loan);
         }
 
-        return loans;
+        return modifiedLoans;
     } catch (error) {
         throw error;
     }
