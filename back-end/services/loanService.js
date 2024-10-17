@@ -1,6 +1,6 @@
 const Loan = require('../datamodels/Loan');
 const Transaction = require('../datamodels/Transaction');
-const User = require('../datamodels/User');
+const { getUserById, getUserByPhoneNumber } = require('./userService');
 const { getTransactionsByLoanId } = require('./transactionService');
 
 // Function to create a loan
@@ -8,14 +8,17 @@ async function createLoan(userId, partyPhoneNumber, role, title, amount, date, n
     const partyPhoneNumberAltered = '966' + partyPhoneNumber.trim().slice(-9);
     
     try {
-        const party = await User.findOne({ phoneNumber: partyPhoneNumberAltered });
-        if (!party) {
-            throw new Error('AUTH_002');
-        } else if (party._id.toString() === userId) {
+
+        const owner = await getUserById(userId);
+        const party = await getUserByPhoneNumber(partyPhoneNumberAltered);
+        
+        if (party._id.toString() === userId) {
             throw new Error('LOAN_009');
         }
+
         const loan = new Loan({
             ownerId: userId,
+            ownerName: owner.fullName,
             partyId: party._id,
             partyName: party.fullName,
             role,
@@ -144,5 +147,5 @@ module.exports = {
     createLoan,
     getLoanById,
     getLoansByUserId,
-    updateLoanStatus  // Export the unified status update function
+    updateLoanStatus 
 };

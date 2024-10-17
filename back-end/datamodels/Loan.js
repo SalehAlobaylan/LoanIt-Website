@@ -4,6 +4,8 @@ const Schema = mongoose.Schema;
 const LoanSchema = new Schema({
 
     ownerId: { type: String, required: true },
+    ownerName: { type: String },
+
     partyId: { type: String, required: true },
     partyName: { type: String },
 

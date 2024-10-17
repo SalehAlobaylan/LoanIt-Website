@@ -1,4 +1,4 @@
-const { createLoan, getLoanById, getLoansByUserId, approveLoan, rejectLoan } = require('../services/loanService');
+const { createLoan, getLoanById, getLoansByUserId, updateLoanStatus } = require('../services/loanService');
 const { sendError } = require('../utils/errorHandler');
 
 // Controller for creating a loan
