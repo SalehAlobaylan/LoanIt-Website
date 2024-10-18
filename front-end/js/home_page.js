@@ -62,17 +62,19 @@ function renderLoanCard(loan, userId) {
     `;
 }
 
-function loadNotifications() {
+function loadNotifications(loan) {
     const notificationList = document.getElementById('notification-list');
+    if (!notificationList) {
+        console.error('Notification list element not found');
+        return;
+    }
 
     const notifications = [
-        { loanId: loan._id, type: loan.role, message: 'Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.', badgeClass: 'bg-success' },
-        { loanId: loan._id, type: 'Borrow Request', message: 'Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.', badgeClass: 'bg-danger' }
+        { loanId: loan._id, type: loan.role, message: `${loan.ownerName} has created a loan with you for ${loan.totalAmount} SAR. The loan is awaiting your approval.`, badgeClass: 'bg-warning' }
     ];
 
     notifications.forEach(notification => {
         const notificationCard = document.createElement('div');
-        // const loanId = 
         notificationCard.classList.add('card', 'my-2');
 
         notificationCard.innerHTML = `
@@ -82,15 +84,37 @@ function loadNotifications() {
                     <p>${notification.message}</p>
                 </div>
                 <div>
-                    <button class="btn btn-success" onclick="handleLoanAction(${api.patch(`/user/loans/:${notification.loanId}`, { status: 'ACTIVE' })}, 'Accept')">Accept</button>
-                    <button class="btn btn-danger" onclick="handleLoanAction(${api.patch(`/user/loans/:${notification.loanId}`, { status: 'CANCELED' })}, 'Reject')">Reject</button>
+                    <button class="btn btn-success">Accept</button>
+                    <button class="btn btn-danger">Reject</button>
                 </div>
             </div>
         `;
 
+        const acceptButton = notificationCard.querySelector('.btn-success');
+        const rejectButton = notificationCard.querySelector('.btn-danger');
+
+        acceptButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'ACTIVE'));
+        rejectButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'CANCELED'));
+
         notificationList.appendChild(notificationCard);
     });
 }
+
+
+function handleLoanAction(loanId, status) {
+    console.log(`Updating loan ID: ${loanId}, Status: ${status}`);  // Debugging log
+
+    api.patch(`/user/loans/${loanId}`, { status })
+        .then(response => {
+            alert(`Loan ${status === 'ACTIVE' ? 'accepted' : 'rejected'} successfully`);
+        })
+        .catch(error => {
+            console.error('Error updating loan status:', error);
+        });
+}
+
+
+
 
 // Main function to fetch loans and render them
 async function getAllLoans() { // todo: rename it to getLoansPage
@@ -107,7 +131,7 @@ async function getAllLoans() { // todo: rename it to getLoansPage
             loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
             if(userId === loan.partyId && loan.status === "PENDING") {
-                loadNotifications(); // have to add attribute 
+                loadNotifications(loan); // have to add attribute 
             } 
         });
 
@@ -116,25 +140,6 @@ async function getAllLoans() { // todo: rename it to getLoansPage
         console.error('Error getting loans:', error.message);
     }
 }
-
-// document.addEventListener('DOMContentLoaded', function() {
-//     const notificationList = document.getElementById('notification-list');
-//     // const clearNotificationsBtn = document.getElementById('clear-notifications');
-
-//     // Example Notifications Data (loanId will be needed)
-//     const notifications = [
-//         { loanId: 1, type: 'Lend Request', message: 'Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.', badgeClass: 'bg-success' },
-//         { loanId: 2, type: 'Borrow Request', message: 'Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.', badgeClass: 'bg-danger' }
-//     ];
-
-//     // Function to create and append notifications
-    
-
-
-//     // Load notifications when the page loads
-//     loadNotifications();
-// });
-
 
 // Call getAllLoans on page load
 window.onload = getAllLoans;
