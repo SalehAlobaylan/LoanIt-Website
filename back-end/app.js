@@ -21,7 +21,6 @@ app.use(express.json());
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
-app.use(express.static(path.join(__dirname, 'home-page')));
 app.use('/auth', authRouter);
 app.use('/user/:userId/loans', loansRouter);
 
