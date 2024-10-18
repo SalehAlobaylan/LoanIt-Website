@@ -28,7 +28,7 @@ function getStatusColor(status) {
 function renderLoanCard(loan, userId) {
     const { _id, title, ownerId, ownerName, partyId, partyName, role, status, totalPaid, totalAmount, date } = loan;
 
-    const otherPartyName = (userId === ownerId) ? partyName : ownerName;
+    const otherPartyName = (userId === ownerId) ? partyName : ownerName;  // to check if the the userid is me or my other party
     const userRole = (userId === partyId) ? role : (role === 'BORROWER' ? 'LENDER' : 'BORROWER');
     const formattedDate = new Date(date).toLocaleDateString('en-GB');
     const progressPercentage = ((totalPaid / totalAmount) * 100).toFixed(1);
@@ -62,8 +62,38 @@ function renderLoanCard(loan, userId) {
     `;
 }
 
+function loadNotifications() {
+    const notificationList = document.getElementById('notification-list');
+
+    const notifications = [
+        { loanId: loan._id, type: loan.role, message: 'Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.', badgeClass: 'bg-success' },
+        { loanId: loan._id, type: 'Borrow Request', message: 'Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.', badgeClass: 'bg-danger' }
+    ];
+
+    notifications.forEach(notification => {
+        const notificationCard = document.createElement('div');
+        // const loanId = 
+        notificationCard.classList.add('card', 'my-2');
+
+        notificationCard.innerHTML = `
+            <div class="card-body-note d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="badge ${notification.badgeClass}">${notification.type}</span>
+                    <p>${notification.message}</p>
+                </div>
+                <div>
+                    <button class="btn btn-success" onclick="handleLoanAction(${api.patch(`/user/loans/:${notification.loanId}`, { status: 'ACTIVE' })}, 'Accept')">Accept</button>
+                    <button class="btn btn-danger" onclick="handleLoanAction(${api.patch(`/user/loans/:${notification.loanId}`, { status: 'CANCELED' })}, 'Reject')">Reject</button>
+                </div>
+            </div>
+        `;
+
+        notificationList.appendChild(notificationCard);
+    });
+}
+
 // Main function to fetch loans and render them
-async function getAllLoans() {
+async function getAllLoans() { // todo: rename it to getLoansPage
     try {
         const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
@@ -75,87 +105,35 @@ async function getAllLoans() {
         loans.forEach(loan => {
             const loanCardHTML = renderLoanCard(loan, userId);
             loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+
+            if(userId === loan.partyId && loan.status === "PENDING") {
+                loadNotifications(); // have to add attribute 
+            } 
         });
+
 
     } catch (error) {
         console.error('Error getting loans:', error.message);
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    const notificationList = document.getElementById('notification-list');
-    const clearNotificationsBtn = document.getElementById('clear-notifications');
+// document.addEventListener('DOMContentLoaded', function() {
+//     const notificationList = document.getElementById('notification-list');
+//     // const clearNotificationsBtn = document.getElementById('clear-notifications');
 
-    // Example Notifications Data (loanId will be needed)
-    const notifications = [
-        { loanId: 1, type: 'Lend Request', message: 'Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.', badgeClass: 'bg-success' },
-        { loanId: 2, type: 'Borrow Request', message: 'Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.', badgeClass: 'bg-danger' }
-    ];
+//     // Example Notifications Data (loanId will be needed)
+//     const notifications = [
+//         { loanId: 1, type: 'Lend Request', message: 'Saleh Alobaylan has created a loan with you for 6450 SAR. The loan is awaiting your approval.', badgeClass: 'bg-success' },
+//         { loanId: 2, type: 'Borrow Request', message: 'Nawaf has created a loan with you for 3500 SAR. The loan is awaiting your approval.', badgeClass: 'bg-danger' }
+//     ];
 
-    // Function to create and append notifications
-    function loadNotifications() {
-        notifications.forEach(notification => {
-            const notificationCard = document.createElement('div');
-            notificationCard.classList.add('card', 'my-2');
+//     // Function to create and append notifications
+    
 
-            notificationCard.innerHTML = `
-                <div class="card-body-note d-flex justify-content-between align-items-center">
-                    <div>
-                        <span class="badge ${notification.badgeClass}">${notification.type}</span>
-                        <p>${notification.message}</p>
-                    </div>
-                    <button class="btn btn-success" onclick="handleLoanAction(${notification.loanId}, 'approve')">Accept</button>
-                    <button class="btn btn-danger" onclick="handleLoanAction(${notification.loanId}, 'reject')">Reject</button>
-                </div>
-            `;
 
-            notificationList.appendChild(notificationCard);
-        });
-    }
-
-    // Function to handle Accept/Reject action
-    window.handleLoanAction = function(loanId, status) {
-        const requestOptions = {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ status })
-        };
-        
-
-        fetch(`/loans/${loanId}`, requestOptions)
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    console.error('Error updating loan:', data.error);
-                } else {
-                    alert(`Loan has been ${status === 'approve' ? 'approved' : 'rejected'} successfully!`);
-                    // Optionally, you can remove the notification after action
-                    removeNotificationCard(loanId);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    // Remove notification card after action
-    function removeNotificationCard(loanId) {
-        const notificationCards = document.querySelectorAll('.card');
-        notificationCards.forEach(card => {
-            if (card.innerHTML.includes(`handleLoanAction(${loanId}`)) {
-                card.remove();
-            }
-        });
-    }
-
-    // Clear all notifications
-    clearNotificationsBtn.addEventListener('click', function() {
-        notificationList.innerHTML = ''; // Clear all notifications
-    });
-
-    // Load notifications when the page loads
-    loadNotifications();
-});
+//     // Load notifications when the page loads
+//     loadNotifications();
+// });
 
 
 // Call getAllLoans on page load
