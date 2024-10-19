@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction History Card</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            overflow: hidden;
+        }
+        .card-header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .dropdown-content {
+            display: none;
+            padding: 16px;
+        }
+        .dropdown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .icon-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+        .arrow-icon {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #333;
+            transition: transform 0.3s ease;
+        }
+        .arrow-icon.open {
+            transform: rotate(180deg);
+        }
+        .transaction {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .transaction-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .transaction-name {
+            font-weight: bold;
+        }
+        .transaction-date {
+            font-size: 12px;
+            color: #666;
+        }
+        .transaction-amount {
+            font-weight: bold;
+        }
+        .transaction-amount.positive {
+            color: green;
+        }
+        .transaction-amount.negative {
+            color: red;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            position: relative;
+        }
+        .input-group {
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .currency-input {
+            display: flex;
+            align-items: center;
+        }
+        .currency-input input {
+            flex-grow: 1;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .currency-label {
+            padding: 8px;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+        }
+        .add-button {
+            background-color: #FF9F1C;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        #addButton {
+            font-size: 24px;
+            line-height: 1;
+        }
+        .close {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <button class="icon-button" id="toggleButton">
+                <div class="arrow-icon"></div>
+            </button>
+        </div>
+        <div class="dropdown-content" id="dropdownContent">
+            <div class="dropdown-header">
+                <span class="card-title">Transactions history</span>
+                <button class="icon-button" id="addButton">+</button>
+            </div>
+            <div id="transactionList">
+                <!-- Transactions will be inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <div id="addTransactionModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Transaction</h2>
+            <div class="input-group">
+                <label for="transactionAmount">Transaction Amount</label>
+                <div class="currency-input">
+                    <input type="number" id="transactionAmount" placeholder="Enter amount">
+                    <span class="currency-label">SAR</span>
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="transactionDate">Date</label>
+                <input type="date" id="transactionDate">
+            </div>
+            <button class="add-button" id="submitTransaction">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        const toggleButton = document.getElementById('toggleButton');
+        const addButton = document.getElementById('addButton');
+        const dropdownContent = document.getElementById('dropdownContent');
+        const transactionList = document.getElementById('transactionList');
+        const modal = document.getElementById('addTransactionModal');
+        const submitTransaction = document.getElementById('submitTransaction');
+        const arrowIcon = document.querySelector('.arrow-icon');
+        const closeButton = document.querySelector('.close');
+
+        let transactions = [
+            { name: 'Abdullah', amount: -120, date: 'Yesterday at 16:34' },
+            { name: 'Abdullah', amount: 120, date: 'Yesterday at 16:34' }
+        ];
+
+        function renderTransactions() {
+            transactionList.innerHTML = transactions.map(t => `
+                <div class="transaction">
+                    <div class="transaction-info">
+                        <span class="transaction-name">${t.name}</span>
+                        <span class="transaction-date">${t.date}</span>
+                    </div>
+                    <span class="transaction-amount ${t.amount >= 0 ? 'positive' : 'negative'}">
+                        ${t.amount >= 0 ? '+' : ''}${t.amount} SAR
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        toggleButton.addEventListener('click', () => {
+            const isOpen = dropdownContent.style.display === 'block';
+            dropdownContent.style.display = isOpen ? 'none' : 'block';
+            arrowIcon.classList.toggle('open', !isOpen);
+        });
+
+        addButton.addEventListener('click', () => {
+            modal.style.display = 'block';
+        });
+
+        closeButton.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        submitTransaction.addEventListener('click', () => {
+            const amount = document.getElementById('transactionAmount').value;
+            const date = document.getElementById('transactionDate').value;
+            
+            if (amount && date) {
+                const newTransaction = {
+                    name: 'Abdullah',
+                    amount: parseFloat(amount),
+                    date: new Date(date).toLocaleDateString()
+                };
+                transactions.unshift(newTransaction);
+                renderTransactions();
+                modal.style.display = 'none';
+                document.getElementById('transactionAmount').value = '';
+                document.getElementById('transactionDate').value = '';
+            } else {
+                alert('Please enter both amount and date.');
+            }
+        });
+
+        renderTransactions();
+    </script>
+</body>
+</html>
