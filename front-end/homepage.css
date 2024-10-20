@@ -103,6 +103,7 @@ h2 {
     border-top: 2px solid var(--footer-border);
     border-radius: 20px;
     background-color: var(--card-background);
+    margin: 20px;
 }
 
 footer .text-center button {
