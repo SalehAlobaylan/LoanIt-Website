@@ -7,17 +7,25 @@
 
 <style>
     .btn-create-loan {
-        background:#eeeded; /* Grey to white gradient */
+        background-color: var(--button-background-color);
+        color: var(--button-text-color);
         border: none;
-        border-radius: 15px;
-        color: black;
+        border-radius: 10px;
         font-size: 1.2rem;
         padding: 0.75rem;
-        transition: background 0.3s ease; /* Smooth transition for hover */
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     .btn-create-loan:hover {
-        background: linear-gradient(to right, #c0c0c0, #f8f9fa); /* Slightly darker grey on hover */
+        background-color: var(--button-hover-background-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-create-loan:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.5);
+        /* Adjust color for focus ring */
     }
 </style>
 
@@ -79,14 +87,15 @@
                     <!-- Notes Field -->
                     <div class="mb-4">
                         <label class="form-label">Notes (optional)</label>
-                        <textarea id="notes" class="form-control" rows="2" placeholder="Notes about the loan"></textarea>
+                        <textarea id="notes" class="form-control" rows="2"
+                            placeholder="Notes about the loan"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-warning w-100 text-white" style="border-radius: 25px;">Submit</button>
+                    <button type="submit" class="btn btn-warning w-100 text-white"
+                        style="border-radius: 25px;">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-

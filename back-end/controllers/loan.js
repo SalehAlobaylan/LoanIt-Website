@@ -43,13 +43,12 @@ const getLoansByUserIdController = async (req, res, next) => {
 
 // Controller for updating the loan status (approve/reject)
 const updateLoanStatusController = async (req, res, next) => {
-    const { loanId } = req.params;
+    const { userId, loanId } = req.params;
     const { status } = req.body;  // Expecting status to be passed in the request body (e.g., 'approve' or 'reject')
-    const { userId } = req.user;  // Assuming userId is available in req.user from authentication middleware
 
     try {
         const loan = await updateLoanStatus(userId, loanId, status);  // Call the service to update the status
-        res.status(200).json({ data: loan });
+        res.status(204).json({ data: loan });
     } catch (error) {
         sendError(res, error.message);
         next(error);

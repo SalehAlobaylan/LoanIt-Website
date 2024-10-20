@@ -15,6 +15,6 @@ router.get('/:loanId', loanController.getLoanById);
 router.get('/', loanController.getLoans);
 
 // Route to update loan status (approve or reject)
-router.patch('/loans/:loanId', loanController.updateLoanStatus);
+router.patch('/:loanId', loanController.updateLoanStatus);
 
 module.exports = router;

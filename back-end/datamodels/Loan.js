@@ -23,6 +23,8 @@ const LoanSchema = new Schema({
         default: 'PENDING'  // Default status is Pending
     },
 
+    isHidden: { type: Boolean, default: false },
+
     createdAt: { type: Date, default: Date.now }, 
 });
 

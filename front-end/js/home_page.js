@@ -35,28 +35,29 @@ function renderLoanCard(loan, userId) {
 
     const statusColor = getStatusColor(status);
     const cardClass = status === 'PENDING' ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
+    const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-lender' : 'progress-bar-lender';
 
     return `
         <div class="card my-2">
             <div class="card-body ${cardClass}">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h5 class="card-title">${title}</h5>
-                        <p class="card-subtitle text-muted">${otherPartyName}</p>
+                        <h5 class="card-title" style="color: var(--text-color);">${title}</h5>
+                        <p class="card-subtitle" style="color: var(--text-color);">${otherPartyName}</p>
                     </div>
                     <div>
                         <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
-                        <span class="badge ${status === 'ACTIVE' ? 'bg-warning' : 'bg-secondary'} rounded-pill">${status}</span>
+                        <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
                     </div>
                 </div>
                 <div class="progress my-2">
-                    <div class="progress-bar bg-danger" style="width: ${progressPercentage}%;"></div>
+                    <div class="${progressBarColor}" style="width: ${progressPercentage}%;"></div>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <span>${totalPaid} SAR</span>
-                    <span>${totalAmount} SAR</span>
+                    <span style="color: var(--text-color);">${totalPaid} SAR</span>
+                    <span style="color: var(--text-color);">${totalAmount} SAR</span>
                 </div>
-                <p class="text-muted">Initiated ${formattedDate}</p>
+                <p style="color: var(--text-color);>Initiated ${formattedDate}</p>
             </div>
         </div>
     `;
@@ -69,8 +70,15 @@ function loadNotifications(loan) {
         return;
     }
 
+    const otherPartyIs = loan.role === 'BORROWER' ? 'lend' : 'borrow';
+
     const notifications = [
-        { loanId: loan._id, type: loan.role, message: `${loan.ownerName} has created a loan with you for ${loan.totalAmount} SAR. The loan is awaiting your approval.`, badgeClass: 'bg-warning' }
+        {
+            loanId: loan._id,
+            type: loan.role,
+            message: `${loan.ownerName} has created a loan with you, ${otherPartyIs}ing you ${loan.totalAmount} SAR. The loan is awaiting your approval.`, 
+            badgeClass: 'bg-warning'
+        }
     ];
 
     notifications.forEach(notification => {
@@ -83,9 +91,9 @@ function loadNotifications(loan) {
                     <span class="badge ${notification.badgeClass}">${notification.type}</span>
                     <p>${notification.message}</p>
                 </div>
-                <div>
-                    <button class="btn btn-success">Accept</button>
-                    <button class="btn btn-danger">Reject</button>
+                <div class="d-flex flex-column justify-content-between align-items-center">
+                    <button class="btn btn-success mb-2 rounded-pill w-100" style="background-color: #32CD32; color: white; border: none;">Accept</button>
+                    <button class="btn btn-danger rounded-pill w-100" style="background: linear-gradient(45deg, #ff416c, #ff4b2b); color: white; border: none;">Reject</button>
                 </div>
             </div>
         `;
@@ -94,7 +102,7 @@ function loadNotifications(loan) {
         const rejectButton = notificationCard.querySelector('.btn-danger');
 
         acceptButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'ACTIVE'));
-        rejectButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'CANCELED'));
+        rejectButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'REJECTED'));
 
         notificationList.appendChild(notificationCard);
     });
@@ -102,9 +110,10 @@ function loadNotifications(loan) {
 
 
 function handleLoanAction(loanId, status) {
+    const userId = api.getUserId(); 
     console.log(`Updating loan ID: ${loanId}, Status: ${status}`);  // Debugging log
 
-    api.patch(`/user/loans/${loanId}`, { status })
+    api.patch(`/user/${userId}/loans/${loanId}`, { status })
         .then(response => {
             alert(`Loan ${status === 'ACTIVE' ? 'accepted' : 'rejected'} successfully`);
         })
@@ -123,6 +132,7 @@ async function getAllLoans() { // todo: rename it to getLoansPage
         const response = await api.get(`/user/${userId}/loans`);
         const loans = response.data;
         const loanList = document.getElementById('loan-list');
+        const hasNotifications = false;
 
         loanList.innerHTML = ''; // Clear existing loans
 
@@ -131,14 +141,25 @@ async function getAllLoans() { // todo: rename it to getLoansPage
             loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
             if(userId === loan.partyId && loan.status === "PENDING") {
+                hasNotifications = true;
                 loadNotifications(loan); // have to add attribute 
             } 
         });
-
+        
+        if (!hasNotifications) {
+            const notificationList = document.getElementById('notification-list');
+            if (notificationList) {
+                notificationList.innerHTML = '<p class="text-center">No new notifications</p>';
+            }
+        }
 
     } catch (error) {
         console.error('Error getting loans:', error.message);
     }
+}
+
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
 }
 
 // Call getAllLoans on page load
