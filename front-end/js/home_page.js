@@ -132,7 +132,7 @@ async function getAllLoans() { // todo: rename it to getLoansPage
         const response = await api.get(`/user/${userId}/loans`);
         const loans = response.data;
         const loanList = document.getElementById('loan-list');
-        const hasNotifications = false;
+        let hasNotifications = false;
 
         loanList.innerHTML = ''; // Clear existing loans
 
