@@ -26,6 +26,8 @@ const createLoanSchema = Joi.object({
         }),
     amount: Joi.number()
         .positive()
+        .max(10000000)
+        .precision(2)
         .required()
         .messages({
             'number.base': 'LOAN_005', // Invalid loan amount format
