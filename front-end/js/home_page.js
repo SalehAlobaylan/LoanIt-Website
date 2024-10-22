@@ -1,7 +1,11 @@
 import { api } from './api.js';
 
+
+let loans = [];
+
 document.addEventListener('DOMContentLoaded', function() {
     api.requireAuth(); 
+
 });
 
 const signout = document.getElementById('signout');
@@ -11,6 +15,11 @@ if (signout) {
         api.logout();
     });
 }
+
+const sortElements = document.querySelectorAll('[data-sort]');
+sortElements.forEach(element => {
+    element.addEventListener('click', sortLoans);
+});
 
 // Helper function to determine the color based on the loan status
 function getStatusColor(status) {
@@ -25,7 +34,7 @@ function getStatusColor(status) {
 }
 
 // Helper function to render a loan card
-function renderLoanCard(loan, userId) {
+function renderLoanCard(loan, userId, index = 0) {
     const { _id, title, ownerId, ownerName, partyId, partyName, role, status, totalPaid, totalAmount, date } = loan;
 
     const otherPartyName = (userId === ownerId) ? partyName : ownerName;  // to check if the the userid is me or my other party
@@ -37,9 +46,13 @@ function renderLoanCard(loan, userId) {
     const cardClass = status === 'PENDING' ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
     const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-lender' : 'progress-bar-lender';
 
+    const animationDelay = `${index * 0.1}s`; // 0.1 seconds delay between each card
+
     return `
-        <div class="card my-2">
-            <div class="card-body ${cardClass}">
+    <div class="card-wrapper my-2 fade-in slide-in" style="animation-delay: ${animationDelay};">
+        <div class="left-border-indicator ${cardClass}-indicator"></div>  <!-- New border element -->
+        <div class="card">
+            <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title" style="color: var(--text-color);">${title}</h5>
@@ -57,10 +70,11 @@ function renderLoanCard(loan, userId) {
                     <span style="color: var(--text-color);">${totalPaid} SAR</span>
                     <span style="color: var(--text-color);">${totalAmount} SAR</span>
                 </div>
-                <p style="color: var(--text-color);>Initiated ${formattedDate}</p>
+                <p style="color: var(--text-secondary-color);">Initiated ${formattedDate}</p>
             </div>
         </div>
-    `;
+    </div>
+`;
 }
 
 function loadNotifications(loan) {
@@ -89,7 +103,7 @@ function loadNotifications(loan) {
             <div class="card-body-note d-flex justify-content-between align-items-center">
                 <div>
                     <span class="badge ${notification.badgeClass}">${notification.type}</span>
-                    <p>${notification.message}</p>
+                    <p style="color: var(--text-color);">${notification.message}</p>
                 </div>
                 <div class="d-flex flex-column justify-content-between align-items-center">
                     <button class="btn btn-success mb-2 rounded-pill w-100" style="background-color: #32CD32; color: white; border: none;">Accept</button>
@@ -101,28 +115,36 @@ function loadNotifications(loan) {
         const acceptButton = notificationCard.querySelector('.btn-success');
         const rejectButton = notificationCard.querySelector('.btn-danger');
 
-        acceptButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'ACTIVE'));
-        rejectButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'REJECTED'));
+        acceptButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'ACTIVE', notificationCard, loan));
+        rejectButton.addEventListener('click', () => handleLoanAction(notification.loanId, 'REJECTED', notificationCard));
 
         notificationList.appendChild(notificationCard);
     });
 }
 
 
-function handleLoanAction(loanId, status) {
+async function handleLoanAction(loanId, status, notificationCard, loan = null) {
     const userId = api.getUserId(); 
     console.log(`Updating loan ID: ${loanId}, Status: ${status}`);  // Debugging log
 
-    api.patch(`/user/${userId}/loans/${loanId}`, { status })
-        .then(response => {
-            alert(`Loan ${status === 'ACTIVE' ? 'accepted' : 'rejected'} successfully`);
+    const response = await api.patch(`/user/${userId}/loans/${loanId}`, { status })
+
+    if (response.status === 204) {
+        Swal.fire({
+            icon: 'success',
+            title: `Loan ${status.toLowerCase()}ed successfully`
         })
-        .catch(error => {
-            console.error('Error updating loan status:', error);
-        });
+
+        notificationCard.remove();
+
+        if (status === 'ACTIVE') {
+            loan.status = 'ACTIVE';
+            const loanCardHTML = renderLoanCard(loan, userId);
+            const loanList = document.getElementById('loan-list');
+            loanList.insertAdjacentHTML('afterbegin', loanCardHTML);
+        }
+    }
 }
-
-
 
 
 // Main function to fetch loans and render them
@@ -130,14 +152,18 @@ async function getAllLoans() { // todo: rename it to getLoansPage
     try {
         const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
-        const loans = response.data;
+
+        loans = response.data;
+        loans.sort((a, b) => {
+            return  b.totalAmount - a.totalAmount;
+        })
         const loanList = document.getElementById('loan-list');
         let hasNotifications = false;
 
         loanList.innerHTML = ''; // Clear existing loans
 
-        loans.forEach(loan => {
-            const loanCardHTML = renderLoanCard(loan, userId);
+        loans.forEach((loan, index) => {
+            const loanCardHTML = renderLoanCard(loan, userId, index);
             loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
             if(userId === loan.partyId && loan.status === "PENDING") {
@@ -149,13 +175,64 @@ async function getAllLoans() { // todo: rename it to getLoansPage
         if (!hasNotifications) {
             const notificationList = document.getElementById('notification-list');
             if (notificationList) {
-                notificationList.innerHTML = '<p class="text-center">No new notifications</p>';
+                notificationList.innerHTML = '<p class="text-center" style="color: var(--text-secondary-color); margin: 50px 0px;">No new notifications</p>';
             }
         }
 
     } catch (error) {
         console.error('Error getting loans:', error.message);
     }
+}
+
+function sortLoans(e) {
+    const userId = api.getUserId(); 
+    const sortType = e.target.getAttribute('data-sort');
+    let order = e.target.getAttribute('data-order') || 'asc';
+
+    if (sortType == 'amount' || sortType == 'date') {
+        order = order === 'asc' ? 'desc' : 'asc';
+        e.target.setAttribute('data-order', order);
+        const icon = e.target.querySelector('i');
+        icon.className = order === 'asc' ? 'bi bi-arrow-up-circle me-2' : 'bi bi-arrow-down-circle me-2';;
+    }
+
+    switch (sortType) {
+        case 'amount':
+            loans.sort((a, b) => {
+                return order === 'asc' ? a.totalAmount - b.totalAmount : b.totalAmount - a.totalAmount;
+            })
+            break;
+        case 'date':
+            loans.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return order === 'asc' ? dateA - dateB : dateB - dateA;
+            })
+            break;
+        case 'status':
+            const statusOrder = ['OVERDUE', 'ACTIVE', 'PENDING', 'SETTLED', 'REJECTED'];
+            loans.sort((a, b) => {
+                const statusA = statusOrder.indexOf(a.status);
+                const statusB = statusOrder.indexOf(b.status);
+                return order === 'asc' ? statusA - statusB : statusB - statusA;
+            })
+            break;
+        default:
+            break;
+    }
+
+    const loanList = document.getElementById('loan-list');
+    loanList.innerHTML = ''; // Clear existing loans
+    loans.forEach((loan, index) => {
+        console.log(index)
+        const loanCardHTML = renderLoanCard(loan, userId, index);
+        loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+
+        if(userId === loan.partyId && loan.status === "PENDING") {
+            hasNotifications = true;
+            loadNotifications(loan); // have to add attribute 
+        } 
+    });
 }
 
 function toggleDarkMode() {

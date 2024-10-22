@@ -88,6 +88,11 @@ async function request(endpoint, { method = 'GET', body = null } = {}) {
 
     try {
         const response = await fetch(url, options);
+
+        if (response.status === 204) {
+            return response;
+        }
+
         const data = await response.json();
 
         if (response.status === 401 && isAuthenticated()) {
@@ -113,6 +118,8 @@ function logout() {
     localStorage.removeItem('user');
     window.location.href = './login.html';
 }
+
+loadSweetAlert();
 
 export const api = {
     get: (endpoint, isProtected = true) => request(endpoint, { method: 'GET', isProtected }),

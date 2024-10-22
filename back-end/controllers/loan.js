@@ -1,4 +1,4 @@
-const { createLoan, getLoanById, getLoansByUserId, updateLoanStatus } = require('../services/loanService');
+const { createLoan, getLoanById, getLoansByUserId, updateLoanStatus, hideLoan } = require('../services/loanService');
 const { sendError } = require('../utils/errorHandler');
 
 // Controller for creating a loan
@@ -55,9 +55,24 @@ const updateLoanStatusController = async (req, res, next) => {
     }
 }
 
+// Controller for hiding a loan
+const hideLoanController = async (req, res, next) => {
+    const { userId, loanId } = req.params;
+    const { isHidden } = req.body;
+
+    try {
+        const _ = await hideLoan(userId, loanId, isHidden);
+        res.status(204).send();
+    } catch (error) {
+        sendError(res, error.message);
+        next(error);
+    }
+}
+
 module.exports = {
     createLoan: createLoanController,
     getLoanById: getLoanByIdController,
     getLoans: getLoansByUserIdController,
     updateLoanStatus: updateLoanStatusController,  // New controller for updating loan status
+    hideLoan: hideLoanController
 };

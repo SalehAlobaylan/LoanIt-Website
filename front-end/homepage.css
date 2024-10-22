@@ -3,6 +3,7 @@
     --background-color: #ffffff;
     --card-background: #fcfcfc;
     --text-color: #000000;
+    --text-secondary-color: #717171;
     --card-shadow: rgba(0, 0, 0, 0.1);
     --borrower-border: #FF4500;
     --lender-border: #32CD32;
@@ -21,7 +22,7 @@
 body.dark-mode {
     /* Dark Mode Variables */
     --background-color: #171717;
-    --card-background: #1e1e1e;
+    --card-background: #282828;
     --text-color: #ffffff;
     --card-shadow: rgba(48, 48, 48, 0.1);
     --borrower-border: #FF6347;
@@ -47,7 +48,7 @@ body {
 .card {
     background-color: var(--card-background);
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     box-shadow: 0 3px 8px var(--card-shadow);
     margin: 1rem 0rem !important;
 }
@@ -63,21 +64,49 @@ body {
     padding: 1rem 1.5rem;
     flex-wrap: wrap;
     justify-content: center;
+    border-radius: 20px;
 }
 
-.card-borrower {
-    border-left: 1rem solid var(--borrower-border); 
-    border-radius: 1rem;
+/* Card wrapper to contain both the indicator and the card */
+.card-wrapper {
+    position: relative;
+    padding-left: 20px; /* Space for the indicator */
 }
 
-.card-lender {
-    border-left: 1rem solid var(--lender-border); 
-    border-radius: 1rem;
+/* Left border indicator */
+.left-border-indicator {
+    width: 100px; /* Set the width for the indicator */
+    height: 80%; /* Smaller than the card height */
+    position: absolute;
+    top: 10%;
+    left: 0px;
+    border-radius: 15px;
+    z-index: 1; /* Set a lower z-index so it's underneath the card */
 }
 
-.card-disabled {
-    border-left: 1rem solid var(--disabled-border); 
-    border-radius: 1rem;
+/* Ensure the card is on top of the indicator */
+.card {
+    position: relative;
+    z-index: 2; /* Higher z-index so it's above the indicator */
+    background-color: var(--card-background);
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 3px 8px var(--card-shadow);
+    margin: 1rem 0rem !important;
+    padding-left: 15px; /* Adjust padding to not overlap with the indicator */
+}
+
+/* Different colors based on loan status */
+.card-borrower-indicator {
+    background-color: var(--borrower-border); /* Red for borrower */
+}
+
+.card-lender-indicator {
+    background-color: var(--lender-border); /* Green for lender */
+}
+
+.card-disabled-indicator {
+    background-color: var(--disabled-border); /* Gray for disabled */
 }
 
 h2 {
@@ -133,4 +162,35 @@ footer a:hover {
 .img {
     height: 2rem;
     float: left;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px); /* Slight upward motion */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    opacity: 0; /* Start hidden */
+    animation: fadeIn 0.6s ease-out forwards; /* Add forwards to retain final state */
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100px); /* Slide in from left */
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.6s ease-out forwards; /* Adjust duration as needed */
 }

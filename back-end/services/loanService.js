@@ -63,12 +63,29 @@ async function updateLoanStatus(partyId, loanId, status) {
 
         if (status === 'ACTIVE') {
             loan.status = 'ACTIVE';
+            loan.isHidden = false;
         } else if (status === 'REJECTED') {
             loan.status = 'REJECTED';
+            loan.isHidden = true;
         } else {
             throw new Error('LOAN_013'); 
         }
 
+        await loan.save();
+        return loan;
+    } catch (error) {
+        throw error;
+    }
+}
+
+async function hideLoan(userId, loanId, isHidden) {
+    try {
+        const loan = await getLoanById(loanId);
+        if (loan.ownerId.toString() !== userId) {
+            throw new Error('LOAN_011');
+        }
+
+        loan.isHidden = isHidden;
         await loan.save();
         return loan;
     } catch (error) {
@@ -152,5 +169,6 @@ module.exports = {
     createLoan,
     getLoanById,
     getLoansByUserId,
-    updateLoanStatus 
+    updateLoanStatus,
+    hideLoan
 };
