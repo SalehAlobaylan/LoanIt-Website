@@ -238,27 +238,27 @@ function toggleLoading(){
 }
 
 async function getAllLoans() {
-    const loanList = document.getElementById('loan-list');
+    const loanList = document.getElementById('loan-list'); // Declared here
 
     try {
         // Show the loading indicator and clear the existing loan list
-        toggleLoading()
+        toggleLoading();
         loanList.innerHTML = ''; // Clear existing loans
-        // make fake 4 seconds delay
+                // make fake 4 seconds delay
+
 
         const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
         const loans = response.data;
-        const loanList = document.getElementById('loan-list');
-        const hasNotifications = false;
+        let hasNotifications = false; // Use let here, because it's reassigned later
 
-        loanList.innerHTML = ''; // Clear existing loans
+        loanList.innerHTML = ''; // Clear existing loans again, though this is redundant after the earlier line
 
         loans.forEach(loan => {
             const loanCardHTML = renderLoanCard(loan, userId);
             loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
-            if(userId === loan.partyId && loan.status === "PENDING") {
+            if (userId === loan.partyId && loan.status === "PENDING") {
                 hasNotifications = true;
                 loadNotifications(loan); // Load notifications for pending loans
             }
@@ -275,9 +275,10 @@ async function getAllLoans() {
         console.error('Error getting loans:', error.message);
     } finally {
         // Hide the loading indicator after data is loaded
-        toggleLoading()
+        toggleLoading();
     }
 }
+
 
 
 function sortLoans(e) {
