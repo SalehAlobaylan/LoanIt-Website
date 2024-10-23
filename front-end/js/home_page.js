@@ -283,13 +283,11 @@ function sortLoans(e) {
     const loanList = document.getElementById('loan-list');
     loanList.innerHTML = ''; // Clear existing loans
     loans.forEach((loan, index) => {
+        
+        if (!loan.isHidden) {
         const loanCardHTML = renderLoanCard(loan, userId, index);
         loanList.insertAdjacentHTML('beforeend', loanCardHTML);
-
-        if(userId === loan.partyId && loan.status === "PENDING") {
-            hasNotifications = true;
-            loadNotifications(loan); // have to add attribute 
-        } 
+        }
     });
 }
 
