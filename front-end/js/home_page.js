@@ -100,9 +100,9 @@ function loadNotifications(loan) {
         notificationCard.classList.add('card', 'my-2');
 
         notificationCard.innerHTML = `
-            <div class="card-body-note d-flex justify-content-between align-items-center">
-                <div>
-                    <span class="badge ${notification.badgeClass}">${notification.type}</span>
+            <div class="card-body-note d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-center">
+                    <span class="badge ${notification.badgeClass} mb-2" style="max-width: 80px; text-align: center;">${notification.type}</span>
                     <p style="color: var(--text-color);">${notification.message}</p>
                 </div>
                 <div class="d-flex flex-column justify-content-between align-items-center">
@@ -146,6 +146,38 @@ async function handleLoanAction(loanId, status, notificationCard, loan = null) {
     }
 }
 
+function presentShowHiddenLoans() {
+    if (loans.some(loan => loan.isHidden)) {
+        const createButton = document.getElementById('modal-container');
+        
+        // Inject raw HTML
+        createButton.insertAdjacentHTML('beforeend', `
+            <button id="toggle-hidden-loans" class="btn" style="color: var(--text-secondary-color); width: 100%; margin: 20px 0px;">Show hidden loans</button>
+            <div id="hidden-loans-list" class="card-container" style="display: none;"></div>
+        `);
+        
+        // Add click event listener to the button
+        document.getElementById('toggle-hidden-loans').addEventListener('click', toggleHiddenLoans);
+    }
+}
+
+function toggleHiddenLoans() {
+    const hiddenLoanList = document.getElementById('hidden-loans-list');
+    const toggleButton = document.getElementById('toggle-hidden-loans');
+    const userId = api.getUserId();
+    
+    if (hiddenLoanList.style.display === 'none') {
+        hiddenLoanList.innerHTML = loans
+            .filter(loan => loan.isHidden)
+            .map((loan, index) => renderLoanCard(loan, userId, index))
+            .join(''); // Generate loan cards and inject them
+        hiddenLoanList.style.display = 'block';
+        toggleButton.innerHTML = 'Hide hidden loans';
+    } else {
+        hiddenLoanList.style.display = 'none';
+        toggleButton.innerHTML = 'Show hidden loans';
+    }
+}
 
 // Main function to fetch loans and render them
 async function getAllLoans() { // todo: rename it to getLoansPage
@@ -162,9 +194,14 @@ async function getAllLoans() { // todo: rename it to getLoansPage
 
         loanList.innerHTML = ''; // Clear existing loans
 
+        presentShowHiddenLoans();
+
         loans.forEach((loan, index) => {
-            const loanCardHTML = renderLoanCard(loan, userId, index);
-            loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+
+            if(loan.isHidden == false){
+                const loanCardHTML = renderLoanCard(loan, userId, index);
+                loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+            }
 
             if(userId === loan.partyId && loan.status === "PENDING") {
                 hasNotifications = true;

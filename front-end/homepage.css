@@ -54,17 +54,14 @@ body {
 }
 
 .card-body-note {
-    padding: 1rem 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
 }
 
-.card-body {
-    background-color: var(--card-background);
-    padding: 1rem 1.5rem;
-    flex-wrap: wrap;
-    justify-content: center;
-    border-radius: 20px;
+.card-body-note > div:first-child {
+    margin-right: 20px; /* Add some space between text and buttons */
 }
 
 /* Card wrapper to contain both the indicator and the card */

@@ -154,7 +154,7 @@ async function getLoansByUserId(userId) {
             loan.totalPaid = amounts.totalPaid;
             loan.remainingAmount = amounts.remainingAmount;
             loan.status = getLoanStatus(loan);
-
+            loan.transactions = null;
             modifiedLoans.push(loan);
         }
 
