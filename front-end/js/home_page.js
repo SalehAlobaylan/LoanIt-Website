@@ -28,40 +28,57 @@ function getStatusColor(status) {
 function renderLoanCard(loan, userId) {
     const { _id, title, ownerId, ownerName, partyId, partyName, role, status, totalPaid, totalAmount, date } = loan;
 
-    const otherPartyName = (userId === ownerId) ? partyName : ownerName;  // to check if the the userid is me or my other party
+    const otherPartyName = (userId === ownerId) ? partyName : ownerName;
     const userRole = (userId === partyId) ? role : (role === 'BORROWER' ? 'LENDER' : 'BORROWER');
     const formattedDate = new Date(date).toLocaleDateString('en-GB');
     const progressPercentage = ((totalPaid / totalAmount) * 100).toFixed(1);
 
     const statusColor = getStatusColor(status);
     const cardClass = status === 'PENDING' ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
-    const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-lender' : 'progress-bar-lender';
+    const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-borrower' : 'progress-bar-lender';
 
     return `
-        <div class="card my-2">
-            <div class="card-body ${cardClass}">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h5 class="card-title" style="color: var(--text-color);">${title}</h5>
-                        <p class="card-subtitle" style="color: var(--text-color);">${otherPartyName}</p>
-                    </div>
-                    <div>
-                        <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
-                        <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
-                    </div>
+    <div class="card my-2">
+        <div class="card-body ${cardClass}">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="card-title" style="color: var(--text-color);">${title}</h5>
+                    <p class="card-subtitle" style="color: var(--text-color);">${otherPartyName}</p>
                 </div>
-                <div class="progress my-2">
-                    <div class="${progressBarColor}" style="width: ${progressPercentage}%;"></div>
+                <div>
+                    <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
+                    <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
                 </div>
-                <div class="d-flex justify-content-between">
-                    <span style="color: var(--text-color);">${totalPaid} SAR</span>
-                    <span style="color: var(--text-color);">${totalAmount} SAR</span>
+            </div>
+            <div class="progress my-2">
+                <div class="${progressBarColor}" style="width: ${progressPercentage}%;"></div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span style="color: var(--text-color);">${totalPaid} SAR</span>
+                <span style="color: var(--text-color);">${totalAmount} SAR</span>
+            </div>
+            <p style="color: var(--text-color);">Initiated ${formattedDate}</p>
+
+            <!-- Dropdown Modal for Transaction History -->
+            <div class="dropdown-modal-header">
+                <button class="dropdown-modal-icon-button" id="toggleButton-${_id}">
+                    <div class="dropdown-modal-arrow-icon"></div>
+                </button>
+            </div>
+            <div class="dropdown-modal-content" id="dropdownContent-${_id}">
+                <div class="dropdown-modal-header">
+                    <span class="dropdown-modal-title">Transactions history</span>
+                    <button class="dropdown-modal-icon-button" id="addButton-${_id}">+</button>
                 </div>
-                <p style="color: var(--text-color);>Initiated ${formattedDate}</p>
+                <div id="transactionList-${_id}">
+                    <!-- Transactions will be inserted here dynamically by JavaScript -->
+                </div>
             </div>
         </div>
-    `;
+    </div>
+`;
 }
+
 
 function loadNotifications(loan) {
     const notificationList = document.getElementById('notification-list');
@@ -109,7 +126,7 @@ function loadNotifications(loan) {
 }
 
 
-function handleLoanAction(loanId, status) {
+function handleLoanAction(loanId, status) { // notification patching either rejecting or accepting
     const userId = api.getUserId(); 
     console.log(`Updating loan ID: ${loanId}, Status: ${status}`);  // Debugging log
 
@@ -126,7 +143,7 @@ function handleLoanAction(loanId, status) {
 
 
 // Main function to fetch loans and render them
-async function getAllLoans() { // todo: rename it to getLoansPage
+async function getAllLoans() {
     try {
         const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
@@ -140,9 +157,29 @@ async function getAllLoans() { // todo: rename it to getLoansPage
             const loanCardHTML = renderLoanCard(loan, userId);
             loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
+            // Transaction history toggling for each loan
+            const toggleButton = document.getElementById(`toggleButton-${loan._id}`);
+            const dropdownContent = document.getElementById(`dropdownContent-${loan._id}`);
+            const arrowIcon = toggleButton.querySelector('.arrow-icon');
+
+            toggleButton.addEventListener('click', () => {
+                const isOpen = dropdownContent.style.display === 'block';
+                dropdownContent.style.display = isOpen ? 'none' : 'block';
+                arrowIcon.classList.toggle('open', !isOpen);
+            });
+
+            // Add transactions modal handling (You can repeat logic from your modal)
+            const addButton = document.getElementById(`addButton-${loan._id}`);
+            const transactionList = document.getElementById(`transactionList-${loan._id}`);
+
+            // Handle adding transactions similarly to your global modal logic
+            addButton.addEventListener('click', () => {
+                // Open modal logic
+            });
+
             if(userId === loan.partyId && loan.status === "PENDING") {
                 hasNotifications = true;
-                loadNotifications(loan); // have to add attribute 
+                loadNotifications(loan);
             } 
         });
         
@@ -157,6 +194,7 @@ async function getAllLoans() { // todo: rename it to getLoansPage
         console.error('Error getting loans:', error.message);
     }
 }
+
 
 function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');

@@ -23,9 +23,10 @@
             <!-- Notifications will be dynamically added here -->
         </div>
         <h2 id="Loans" class="text-warning">Your Loans</h2>
-        <div class="card-container" id="loan-list">
+        <div class="card-container" id="loan-list" >
 
         </div>
+        <div id="register-loan-modal"></div>
         <div id="modal-container"></div>
     </div>
 
@@ -99,6 +100,14 @@
     <script>
         // Dynamically load modal content into the modal-container div
         fetch('register-loan-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('register-loan-modal').innerHTML = html;
+            })
+            .catch(err => console.warn('Error loading modal:', err));
+    </script>
+    <script>
+        fetch('dropdown-modal.html')
             .then(response => response.text())
             .then(html => {
                 document.getElementById('modal-container').innerHTML = html;
