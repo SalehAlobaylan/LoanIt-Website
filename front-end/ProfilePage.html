@@ -4,7 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
+        :root {
+            --background-color: #ffffff;
+            --card-background: #fcfcfc;
+            --text-color: #000000;
+            --text-secondary-color: #717171;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --primary-color: #ffc107;
+            --footer-border: #e0e0e0;
+        }
+
+        body.dark-mode {
+            --background-color: #171717;
+            --card-background: #282828;
+            --text-color: #ffffff;
+            --text-secondary-color: #a0a0a0;
+            --card-shadow: rgba(48, 48, 48, 0.1);
+            --primary-color: #ffca28;
+            --footer-border: #505050;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,14 +35,14 @@
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            padding-bottom: 6rem;
         }
 
         .container {
-            max-width: 430px;
+            max-width: 800px;
             margin: 0 auto;
-            background: white;
-            min-height: 100vh;
             padding: 20px;
         }
 
@@ -32,7 +54,7 @@
         }
 
         .header h1 {
-            color: #ff9840;
+            color: var(--primary-color);
             font-size: 24px;
         }
 
@@ -42,15 +64,16 @@
             cursor: pointer;
             font-weight: 300;
             font-size: 28px;
-            color: #000;
+            color: var(--text-color);
         }
 
         .box {
-            background: #f8f8f8;
-            border-radius: 12px;
+            background: var(--card-background);
+            border-radius: 20px;
             padding: 20px;
             margin-bottom: 20px;
             position: relative;
+            box-shadow: 0 3px 8px var(--card-shadow);
         }
 
         .edit-btn {
@@ -61,7 +84,7 @@
             background: none;
             cursor: pointer;
             font-size: 18px;
-            color: #666;
+            color: var(--text-secondary-color);
             padding: 12px;
         }
 
@@ -77,16 +100,17 @@
             display: block;
             margin-bottom: 8px;
             font-size: 14px;
-            color: #333;
+            color: var(--text-secondary-color);
         }
 
         .form-group input {
             width: 100%;
             padding: 12px;
             border: none;
-            background: #f0f0f0;
+            background: var(--background-color);
             border-radius: 8px;
             font-size: 16px;
+            color: var(--text-color);
         }
 
         .phone-inputs {
@@ -102,19 +126,24 @@
             position: relative;
         }
 
+        .password-container input {
+            padding-right: 40px;
+        }
+
         .toggle-password {
             position: absolute;
             right: 12px;
             top: 50%;
             transform: translateY(-50%);
             cursor: pointer;
-            color: #666;
+            color: var(--text-secondary-color);
+            z-index: 1;
         }
 
         .analytics-title {
             font-size: 24px;
             margin-bottom: 20px;
-            color: #000;
+            color: var(--text-color);
         }
 
         .analytics-item {
@@ -125,6 +154,60 @@
         .loans { color: #4a90e2; }
         .owe { color: #ff7f50; }
         .owed { color: #ffd700; }
+
+        .footer-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-top: 2px solid var(--footer-border);
+            border-radius: 20px 20px 0 0;
+            background-color: var(--primary-color);
+            margin: 0 20px;
+            padding: 8px 0;
+        }
+
+        footer .container .d-flex {
+        align-items: center;
+        }
+
+        footer .text-center {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
+
+        .img {
+            height: 2rem;
+            float: left;
+        }
+
+        footer .text-center button {
+            margin: 0;
+            font-size: 14px;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            color: var(--footer-text-color);
+            padding: 0;
+        }
+
+        footer .text-center i {
+            font-size: 1.5rem;
+            color: var(--footer-text-color);
+        }
+
+        footer a {
+            text-decoration: none !important;
+            color: var(--footer-text-color) !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        footer a:hover {
+            color: var(--footer-text-color) !important;
+        }
 
         .donut-chart {
             width: 150px;
@@ -144,12 +227,12 @@
             transform: translate(-50%, -50%);
             font-size: 20px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-color);
         }
     </style>
 </head>
-<body>
-    <div class="container">
+<body class="dark-mode">
+    <div class="container mt-4">
         <div class="header">
             <button class="back-btn">‹</button>
             <h1>Profile</h1>
@@ -180,7 +263,7 @@
                 <label>Your password</label>
                 <div class="password-container">
                     <input type="password" value="************" readonly>
-                    <span class="toggle-password">👁</span>
+                    <i class="bi bi-eye-fill toggle-password"></i>
                 </div>
             </div>
         </div>
@@ -201,5 +284,63 @@
             </div>
         </div>
     </div>
+
+    <!-- Footer Navigation -->
+    <footer class="footer-container">
+        <div class="container">
+            <div class="d-flex justify-content-around">
+                <div class="text-center">
+                    <img class="img" src="./resources/TNMWCH01.svg" alt="Logo">
+                </div>
+                <div class="text-center">
+                    <a href="#loans">
+                        <i class="bi bi-wallet-fill"></i>
+                        <button type="button" class="btn">Loans</button>
+                    </a>
+                </div>
+                <div class="text-center">
+                    <a href="#profile">
+                        <i class="bi bi-person-fill"></i>
+                        <button type="button" class="btn">Profile</button>
+                    </a>
+                </div>
+                <div class="text-center">
+                    <a href="#signout">
+                        <i class="bi bi-box-arrow-right"></i>
+                        <button type="button" id="signout" class="btn">Sign Out</button>
+                    </a>
+                </div>
+                <div class="text-center">
+                    <i id="themeIcon" class="bi bi-moon-fill"></i>
+                    <button type="button" id="toggleDarkMode" class="btn">theme</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const toggleDarkMode = document.getElementById('toggleDarkMode');
+        const themeIcon = document.getElementById('themeIcon');
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.querySelector('input[type="password"]');
+
+        toggleDarkMode.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.replace('bi-moon-fill', 'bi-sun-fill');
+            } else {
+                themeIcon.classList.replace('bi-sun-fill', 'bi-moon-fill');
+            }
+        });
+
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('bi-eye-fill');
+            togglePassword.classList.toggle('bi-eye-slash-fill');
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
