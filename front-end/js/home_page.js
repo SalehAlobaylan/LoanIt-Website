@@ -46,12 +46,12 @@ function renderLoanCard(loan, userId, index = 0) {
     const cardClass = status === 'PENDING' ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
     const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-lender' : 'progress-bar-lender';
 
-    const animationDelay = `${index * 0.1}s`; // 0.1 seconds delay between each card
+    const animationDelay = `${index * 0.1}s`;
 
-    return `
+    // Generate loan card HTML
+    const loanCardHTML = `
     <div class="card-wrapper my-2 fade-in slide-in" style="animation-delay: ${animationDelay};">
-        <div class="left-border-indicator ${cardClass}-indicator"></div>  <!-- Border indicator -->
-
+        <div class="left-border-indicator ${cardClass}-indicator"></div>
         <div class="card">
             <div class="card-body ${cardClass}">
                 <div class="d-flex justify-content-between align-items-center">
@@ -60,7 +60,7 @@ function renderLoanCard(loan, userId, index = 0) {
                         <p class="card-subtitle" style="color: var(--text-color);">${otherPartyName}</p>
                     </div>
                     <div>
-                        <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
+                        <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="Dropdown Arrow">
                         <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
                     </div>
                 </div>
@@ -79,7 +79,7 @@ function renderLoanCard(loan, userId, index = 0) {
                         <div class="dropdown-modal-arrow-icon"></div>
                     </button>
                 </div>
-                <div class="dropdown-modal-content" id="dropdownContent-${_id}">
+                <div class="dropdown-modal-content" id="dropdownContent-${_id}" style="display: none;">
                     <div class="dropdown-modal-header">
                         <span class="dropdown-modal-title">Transactions history</span>
                         <button class="dropdown-modal-icon-button" id="addButton-${_id}">+</button>
@@ -92,7 +92,24 @@ function renderLoanCard(loan, userId, index = 0) {
         </div>
     </div>
     `;
+
+    // Insert the HTML into the page
+    const loanList = document.getElementById('loan-list');
+    loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+
+    // Add event listener to toggle dropdown content
+    const toggleButton = document.getElementById(`toggleButton-${_id}`);
+    const dropdownContent = document.getElementById(`dropdownContent-${_id}`);
+
+    toggleButton.addEventListener('click', () => {
+        if (dropdownContent.style.display === 'none') {
+            dropdownContent.style.display = 'block';
+        } else {
+            dropdownContent.style.display = 'none';
+        }
+    });
 }
+
 
 
 
