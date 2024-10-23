@@ -50,9 +50,10 @@ function renderLoanCard(loan, userId, index = 0) {
 
     return `
     <div class="card-wrapper my-2 fade-in slide-in" style="animation-delay: ${animationDelay};">
-        <div class="left-border-indicator ${cardClass}-indicator"></div>  <!-- New border element -->
+        <div class="left-border-indicator ${cardClass}-indicator"></div>  <!-- Border indicator -->
+
         <div class="card">
-            <div class="card-body">
+            <div class="card-body ${cardClass}">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h5 class="card-title" style="color: var(--text-color);">${title}</h5>
@@ -71,50 +72,28 @@ function renderLoanCard(loan, userId, index = 0) {
                     <span style="color: var(--text-color);">${totalAmount} SAR</span>
                 </div>
                 <p style="color: var(--text-secondary-color);">Initiated ${formattedDate}</p>
-            </div>
-        </div>
-    </div>
 
-    <div class="card my-2">
-        <div class="card-body ${cardClass}">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h5 class="card-title" style="color: var(--text-color);">${title}</h5>
-                    <p class="card-subtitle" style="color: var(--text-color);">${otherPartyName}</p>
-                </div>
-                <div>
-                    <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="">
-                    <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
-                </div>
-            </div>
-            <div class="progress my-2">
-                <div class="${progressBarColor}" style="width: ${progressPercentage}%;"></div>
-            </div>
-            <div class="d-flex justify-content-between">
-                <span style="color: var(--text-color);">${totalPaid} SAR</span>
-                <span style="color: var(--text-color);">${totalAmount} SAR</span>
-            </div>
-            <p style="color: var(--text-color);">Initiated ${formattedDate}</p>
-
-            <!-- Dropdown Modal for Transaction History -->
-            <div class="dropdown-modal-header">
-                <button class="dropdown-modal-icon-button" id="toggleButton-${_id}">
-                    <div class="dropdown-modal-arrow-icon"></div>
-                </button>
-            </div>
-            <div class="dropdown-modal-content" id="dropdownContent-${_id}">
+                <!-- Dropdown Modal for Transaction History -->
                 <div class="dropdown-modal-header">
-                    <span class="dropdown-modal-title">Transactions history</span>
-                    <button class="dropdown-modal-icon-button" id="addButton-${_id}">+</button>
+                    <button class="dropdown-modal-icon-button" id="toggleButton-${_id}">
+                        <div class="dropdown-modal-arrow-icon"></div>
+                    </button>
                 </div>
-                <div id="transactionList-${_id}">
-                    <!-- Transactions will be inserted here dynamically by JavaScript -->
+                <div class="dropdown-modal-content" id="dropdownContent-${_id}">
+                    <div class="dropdown-modal-header">
+                        <span class="dropdown-modal-title">Transactions history</span>
+                        <button class="dropdown-modal-icon-button" id="addButton-${_id}">+</button>
+                    </div>
+                    <div id="transactionList-${_id}">
+                        <!-- Transactions will be inserted here dynamically by JavaScript -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-`;
+    `;
 }
+
 
 
 function loadNotifications(loan) {
