@@ -14,16 +14,43 @@
 
 <body class="dark-mode">
 
-    <div class="container mt-4">
-
+    <div class="container mt-4" id="home-page">
 
         <!-- Notifications Section -->
         <h2 class="text-warning">Notifications</h2>
+        <div id="loading-indicator" class="loading-spinner" style="display: none;">Loading...</div>
         <div id="notification-list">
             <!-- Notifications will be dynamically added here -->
         </div>
-        <h2 id="Loans" class="text-warning">Your Loans</h2>
-        <div class="card-container" id="loan-list" >
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 id="Loans" class="text-warning">Your Loans</h2>
+            <!-- Sort button, with icons for sorting options -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-funnel-fill"></i> Sort
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#" data-sort="amount" data-order="asc" id="sort-amount">
+                            <i class="bi bi-arrow-up-circle me-2"></i> Amount
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#" data-sort="date" data-order="asc" id="sort-date">
+                            <i class="bi bi-arrow-up-circle me-2"></i> Initiate Date
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item d-flex align-items-center" href="#" data-sort="status" id="sort-status">
+                            <i class="bi bi-check2-circle me-2"></i> Status
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="loading-indicator" class="loading-spinner" style="display: none;">Loading...</div>
+        <div class="card-container" id="loan-list">
 
         </div>
         <div id="register-loan-modal"></div>

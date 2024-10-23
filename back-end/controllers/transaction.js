@@ -15,7 +15,7 @@ const createTransaction = async (req, res, next) => {
 }
 
 const getTransactions = async (req, res, next) => {
-    const { loanId } = req.params;  // Fix typo here: userId not needed
+    const { loanId } = req.params;  
     
     try {
         const transactions = await getTransactionsService(loanId);
