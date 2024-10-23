@@ -45,6 +45,33 @@ body {
     padding-bottom: 6rem;
 }
 
+.loading-spinner {
+    text-align: center;
+    font-size: 18px;
+    color: var(--text-secondary-color);
+    margin: 20px;
+}
+
+.loading-spinner::after {
+    content: ' ';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    border-radius: 50%;
+    border: 3px solid var(--text-secondary-color);
+    border-color: var(--text-secondary-color) transparent var(--text-secondary-color) transparent;
+    animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
 .card {
     background-color: var(--card-background);
     border: none;

@@ -100,7 +100,7 @@ function loadNotifications(loan) {
         notificationCard.classList.add('card', 'my-2');
 
         notificationCard.innerHTML = `
-            <div class="card-body-note d-flex justify-content-between">
+            <div class="card-body-note d-flex justify-content-between fade-in slide-in">
                 <div class="d-flex flex-column justify-content-center">
                     <span class="badge ${notification.badgeClass} mb-2" style="max-width: 80px; text-align: center;">${notification.type}</span>
                     <p style="color: var(--text-color);">${notification.message}</p>
@@ -179,47 +179,69 @@ function toggleHiddenLoans() {
     }
 }
 
-// Main function to fetch loans and render them
-async function getAllLoans() { // todo: rename it to getLoansPage
+function toggleLoading(){
+    // toggling for all elements that has the loading spinner class
+    const loadingIndicator = document.getElementsByClassName('loading-spinner');
+    for (let i = 0; i < loadingIndicator.length; i++) {
+        if (loadingIndicator[i].style.display === 'block') {
+            loadingIndicator[i].style.display = 'none';
+        } else {
+            loadingIndicator[i].style.display = 'block';
+        }
+    }
+
+    // hide id="modal-container" when loading
+    const modalContainer = document.getElementById('modal-container');
+    if (modalContainer) {
+        modalContainer.style.display = modalContainer.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+async function getAllLoans() {
+    const loanList = document.getElementById('loan-list');
+
     try {
+        // Show the loading indicator and clear the existing loan list
+        toggleLoading()
+        loanList.innerHTML = ''; // Clear existing loans
+        // make fake 4 seconds delay
+
         const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
-
         loans = response.data;
-        loans.sort((a, b) => {
-            return  b.totalAmount - a.totalAmount;
-        })
-        const loanList = document.getElementById('loan-list');
+
+        // Sort loans by total amount (optional, based on your logic)
+        loans.sort((a, b) => b.totalAmount - a.totalAmount);
+
         let hasNotifications = false;
-
-        loanList.innerHTML = ''; // Clear existing loans
-
         presentShowHiddenLoans();
 
         loans.forEach((loan, index) => {
-
-            if(loan.isHidden == false){
+            if (!loan.isHidden) {
                 const loanCardHTML = renderLoanCard(loan, userId, index);
                 loanList.insertAdjacentHTML('beforeend', loanCardHTML);
             }
-
-            if(userId === loan.partyId && loan.status === "PENDING") {
+            if (userId === loan.partyId && loan.status === "PENDING") {
                 hasNotifications = true;
-                loadNotifications(loan); // have to add attribute 
-            } 
+                loadNotifications(loan); // Load notifications for pending loans
+            }
         });
-        
+
+        // Show message if no notifications are found
         if (!hasNotifications) {
             const notificationList = document.getElementById('notification-list');
             if (notificationList) {
                 notificationList.innerHTML = '<p class="text-center" style="color: var(--text-secondary-color); margin: 50px 0px;">No new notifications</p>';
             }
         }
-
     } catch (error) {
         console.error('Error getting loans:', error.message);
+    } finally {
+        // Hide the loading indicator after data is loaded
+        toggleLoading()
     }
 }
+
 
 function sortLoans(e) {
     const userId = api.getUserId(); 
@@ -261,7 +283,6 @@ function sortLoans(e) {
     const loanList = document.getElementById('loan-list');
     loanList.innerHTML = ''; // Clear existing loans
     loans.forEach((loan, index) => {
-        console.log(index)
         const loanCardHTML = renderLoanCard(loan, userId, index);
         loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
