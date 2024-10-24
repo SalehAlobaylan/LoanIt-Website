@@ -33,6 +33,21 @@ function getStatusColor(status) {
     return statusColors[status] || '#A9A9A9'; // Default to DarkGray if status is unknown
 }
 
+function transactionsEventListener(loanCardHTML, _id) {
+    // Add event listener to the entire card
+    const cardElement = loanCardHTML.querySelector(`#card-${_id}`);
+    const dropdownContent = loanCardHTML.querySelector(`#dropdownContent-${_id}`);
+
+    cardElement.addEventListener('click', () => {
+        // Toggle visibility of transaction history
+        if (dropdownContent.style.display === 'none') {
+            dropdownContent.style.display = 'block';
+        } else {
+            dropdownContent.style.display = 'none';
+        }
+    });
+}
+
 // Helper function to render a loan card
 function renderLoanCard(loan, userId, index = 0) {
     const { _id, title, ownerId, ownerName, partyId, partyName, role, status, totalPaid, totalAmount, date } = loan;
@@ -49,8 +64,10 @@ function renderLoanCard(loan, userId, index = 0) {
     const animationDelay = `${index * 0.1}s`;
 
     // Generate loan card HTML
-    const loanCardHTML = `
-    <div class="card-wrapper my-2 fade-in slide-in" style="animation-delay: ${animationDelay};">
+    
+    const loanCardHTML = document.createElement('div');
+    loanCardHTML.innerHTML = `
+    <div class="card-wrapper my-2 fade-in slide-in" style="animation-delay: ${animationDelay};" id="card-${_id}">
         <div class="left-border-indicator ${cardClass}-indicator"></div>
         <div class="card">
             <div class="card-body ${cardClass}">
@@ -74,15 +91,10 @@ function renderLoanCard(loan, userId, index = 0) {
                 <p style="color: var(--text-secondary-color);">Initiated ${formattedDate}</p>
 
                 <!-- Dropdown Modal for Transaction History -->
-                <div class="dropdown-modal-header">
-                    <button class="dropdown-modal-icon-button" id="toggleButton-${_id}">
-                        <div class="dropdown-modal-arrow-icon"></div>
-                    </button>
-                </div>
                 <div class="dropdown-modal-content" id="dropdownContent-${_id}" style="display: none;">
                     <div class="dropdown-modal-header">
-                        <span class="dropdown-modal-title">Transactions history</span>
-                        <button class="dropdown-modal-icon-button" id="addButton-${_id}">+</button>
+                        <span class="dropdown-modal-title" style="color: var(--text-color);">Transactions history</span>
+                        <button class="dropdown-modal-icon-button" id="addButton-${_id}" style="color: var(--text-color); font-size:30px;">+</button>
                     </div>
                     <div id="transactionList-${_id}">
                         <!-- Transactions will be inserted here dynamically by JavaScript -->
@@ -93,25 +105,13 @@ function renderLoanCard(loan, userId, index = 0) {
     </div>
     `;
 
-    // Insert the HTML into the page
-    const loanList = document.getElementById('loan-list');
-    loanList.insertAdjacentHTML('beforeend', loanCardHTML);
 
-    // Add event listener to toggle dropdown content
-    const toggleButton = document.getElementById(`toggleButton-${_id}`);
-    const dropdownContent = document.getElementById(`dropdownContent-${_id}`);
+    // Add event listener to the entire card
+    transactionsEventListener(loanCardHTML, _id);
 
-    toggleButton.addEventListener('click', () => {
-        if (dropdownContent.style.display === 'none') {
-            dropdownContent.style.display = 'block';
-        } else {
-            dropdownContent.style.display = 'none';
-        }
-    });
+
+    return loanCardHTML;
 }
-
-
-
 
 function loadNotifications(loan) {
     const notificationList = document.getElementById('notification-list');
@@ -239,20 +239,18 @@ async function getAllLoans() {
     try {
         // Show the loading indicator and clear the existing loan list
         toggleLoading();
-        loanList.innerHTML = ''; // Clear existing loans
-                // make fake 4 seconds delay
-
+        loanList.innerHTML = ''; 
 
         const userId = api.getUserId();  // Get current user's ID
         const response = await api.get(`/user/${userId}/loans`);
-        const loans = response.data;
+        loans = response.data;
         let hasNotifications = false; // Use let here, because it's reassigned later
 
         loanList.innerHTML = ''; // Clear existing loans again, though this is redundant after the earlier line
 
-        loans.forEach(loan => {
-            const loanCardHTML = renderLoanCard(loan, userId);
-            loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+        loans.forEach((loan, index) => {
+            const loanCardHTML = renderLoanCard(loan, userId, index);
+            loanList.insertAdjacentElement('beforeend', loanCardHTML);
 
             if (userId === loan.partyId && loan.status === "PENDING") {
                 hasNotifications = true;
@@ -281,6 +279,11 @@ function sortLoans(e) {
     const userId = api.getUserId(); 
     const sortType = e.target.getAttribute('data-sort');
     let order = e.target.getAttribute('data-order') || 'asc';
+
+    // we are not geting the loans in the loan list
+    // let's print somethign that may help us identify the issue
+    console.log(loans);
+
 
     if (sortType == 'amount' || sortType == 'date') {
         order = order === 'asc' ? 'desc' : 'asc';
