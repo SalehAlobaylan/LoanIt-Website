@@ -42,14 +42,13 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
     if (!cardElement) return;
 
     cardElement.addEventListener('click', () => {
-        if (dropdownContent.style.display === 'none') {
-            dropdownContent.style.display = 'block';
-            getAllLoanTransactions(_id)
+        if (dropdownContent.classList.contains('open')) {
+            dropdownContent.classList.remove('open');
         } else {
-            dropdownContent.style.display = 'none';
+            dropdownContent.classList.add('open');
+            getAllLoanTransactions(_id);
         }
     });
-
     addButton.addEventListener('click', (event) => {
         event.stopPropagation();
 
@@ -73,11 +72,22 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
                         notes: document.getElementById('transactionNotes').value,
                     };
 
+                    // validate amount and date not empy
+                    if (!transactionData.amount || !transactionData.date) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'Amount and Date are required'
+                        });
+                        return;
+                    }
+
                     // Submit transaction based on userId and loanId
                     transactions.createTransaction(userId, _id, transactionData.type, transactionData.amount, transactionData.date, transactionData.notes)
                         .then(() => {
                             transactionModal.hide();  // Close the modal after successful submission
                             getAllLoanTransactions(_id)
+                            updateLoan(_id);
                         })
                         .catch((error) => {
                             console.error('Error submitting transaction:', error);
@@ -88,6 +98,38 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
     });
 }
 
+async function updateLoan(loanId) {
+    try {
+        // Get the current user ID and fetch the updated loan data
+        const userId = api.getUserId();
+        const response = await api.get(`/user/${userId}/loans/${loanId}`);
+        const updatedLoan = response.data;
+
+        // Get the loan list and find the specific loan card and its index in the loans array
+        const loanList = document.getElementById('loan-list');
+        const loanCard = loanList.querySelector(`#card-${loanId}`);
+        const loanIndex = loans.findIndex(loan => loan._id === loanId);
+
+        // Remove the existing loan card from the UI
+        if (loanCard) {
+            loanCard.remove();
+        }
+
+        // Update the loan data in the loans array
+        if (loanIndex !== -1) {
+            loans[loanIndex] = updatedLoan;
+        } else {
+            loans.push(updatedLoan);
+        }
+
+        // Render the updated loan card and insert it into the loan list
+        const loanCardHTML = renderLoanCard(updatedLoan, userId, loanIndex !== -1 ? loanIndex : loans.length - 1);
+        loanList.insertAdjacentElement('afterbegin', loanCardHTML);
+        
+    } catch (error) {
+        console.error('Error updating loan:', error.message);
+    }
+}
 
 async function getAllLoanTransactions(loanId) {
     toggleLoading(`transaction-list-${loanId}`); // Show loading indicator
@@ -97,8 +139,12 @@ async function getAllLoanTransactions(loanId) {
 
     if (loanTransactions.length === 0) {
         transactionList.innerHTML = '<p class="text-center" style="color: var(--text-secondary-color); margin: 50px 0px;">No transactions found</p>';
+        toggleLoading(`transaction-list-${loanId}`); // Hide loading indicator
         return;
     }
+
+    // sort transaction by closest date
+    loanTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     transactionList.innerHTML = await loanTransactions.map(transaction => {
         const { _id, type, amount, date, notes } = transaction;
@@ -123,7 +169,7 @@ async function getAllLoanTransactions(loanId) {
             : `<div class="transaction-amount negative" style="white-space: nowrap; color: red;">${amount} SAR</div>`;
     
         return `
-            <div class="transaction my-3">
+            <div id="${_id}" class="transaction my-3">
                 <!-- Transaction Row Layout -->
                 <div class="d-flex flex-column align-items-center justify-content-between">
                     <!-- Icon and Transaction Details (Type and Date) -->
@@ -142,12 +188,32 @@ async function getAllLoanTransactions(loanId) {
                     </div>
                 </div>
                 <!-- Amount (Right-Aligned) -->
+                <div class="d-flex justify-content-end">
                 ${amountDisplay}
+                    <!-- Delete Button with Trash Icon -->
+                    <button class="btn-delete-transaction" data-transaction-id="${_id}" style="border: none; background: transparent;">
+                        <i class="bi bi-trash" style="color: red; font-size: 20px;"></i>
+                    </button>
+                </div>
             </div>
         `;
     }).join('');
     
-    
+    const deleteButtons = transactionList.querySelectorAll('.btn-delete-transaction');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async function(event) {
+            event.stopPropagation();  // Prevent triggering the parent click event
+            const transactionId = button.getAttribute('data-transaction-id');
+            try {
+                if (await transactions.deleteTransaction(userId, loanId, transactionId)){
+                    updateLoan(loanId);
+                    document.getElementById(transactionId).remove();
+                }
+            } catch (error) {
+                console.error('Error deleting transaction:', error);
+            }
+        });
+    });
     toggleLoading(`transaction-list-${loanId}`); // Show loading indicator
 }
 
@@ -164,7 +230,7 @@ function renderLoanCard(loan, userId, index = 0) {
     const triangleImage = userRole === 'BORROWER' ? './resources/triangle-fill.svg' : './resources/triangle-fill-green.svg';
     const triangleDgree = userRole === 'BORROWER' ? 'rotate(180deg)' : 'rotate(0deg)';
     const cardClass = (status === 'PENDING' || status === 'REJECTED') ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
-    const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-lender' : 'progress-bar-lender';
+    const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-borrower' : 'progress-bar-lender';
 
     const animationDelay = `${index * 0.1}s`;
 
@@ -196,7 +262,7 @@ function renderLoanCard(loan, userId, index = 0) {
                 <p style="color: var(--text-secondary-color);">Initiated ${formattedDate}</p>
 
                 <!-- Dropdown Modal for Transaction History -->
-                <div class="dropdown-modal-content" id="dropdownContent-${_id}" style="display: none;">
+                <div class="dropdown-modal-content" id="dropdownContent-${_id}">
                     <div class="dropdown-modal-header d-flex justify-content-between align-items-center">
                         <span class="dropdown-modal-title" style="color: var(--text-color);">Transactions history</span>
                         <button class="dropdown-modal-icon-button" id="addButton-${_id}" style="background: none; border: none; color: var(--text-color);">

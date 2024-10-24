@@ -31,7 +31,7 @@ const deleteTransactionController = async (req, res, next) => {
 
     try {
         const transaction = await deleteTransaction(transactionId);
-        res.json({ data: transaction });
+        res.status(204).send();
     } catch (error) {
         sendError(res, error.message);  // Use error message to send appropriate error code
         next(error);

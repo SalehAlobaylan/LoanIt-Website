@@ -33,10 +33,6 @@ async function createTransaction(userId, loanId, type, amount, date, notes) {
 async function getTransactionsByLoanId(loanId) {
     try {
         const transactions = await Transaction.find({ loanId });
-        if (transactions.length === 0) {
-            throw new Error('TRANS_006');  // Throw an error if no transactions found
-        }
-
         return transactions;
     } catch (error) {
         throw error;
@@ -49,7 +45,7 @@ async function deleteTransaction(transactionId) {
         if (!transaction) {
             throw new Error('TRANS_006')
         }
-        await transaction.delete();
+        await transaction.deleteOne();
         return transaction;
     } catch (error) {
         throw error;

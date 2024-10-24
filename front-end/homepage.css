@@ -212,9 +212,19 @@ footer a:hover {
 }
 
 .dropdown-modal-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
     background-color: var(--background-color);
-    padding: 20px;
     border-radius: 20px;
+    padding: 0;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, padding 0.4s ease-in-out;
+}
+
+.dropdown-modal-content.open {
+    max-height: 500px; /* Adjust based on the expected content height */
+    opacity: 1;
+    padding: 20px;
 }
 /* Modal and Input Group Styling */
 body.dark-mode .modal-content {
