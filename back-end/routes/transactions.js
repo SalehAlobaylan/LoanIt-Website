@@ -4,19 +4,13 @@ const { validateRequest } = require('../middlewares/validation');
 
 const express = require('express');
 const router = express.Router({ mergeParams: true });
-// Route to create a loan
-router.post('/', loanController.createLoan);
 
-// Route to get a loan by ID
-router.get('/:loanId', loanController.getLoanById);
+// Route to get all transactions by user ID
+router.get('/', transactionController.getTransactions);
 
-// Route to get all loans by user ID
-router.get('/', loanController.getLoans);
+// Route to create a transaction
+router.post('/', transactionController.createTransactionController);
 
-// Route to update loan status (approve or reject)
-router.patch('/:loanId', loanController.updateLoanStatus);
-
-// Route to hide a loan
-router.patch('/:loanId/hide', loanController.hideLoan);
+router.delete('/:transactionId', transactionController.deleteTransactionController);
 
 module.exports = router;

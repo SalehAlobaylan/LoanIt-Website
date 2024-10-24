@@ -1,0 +1,52 @@
+
+<!-- Modal Structure for Adding Transactions -->
+<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-labelledby="addTransactionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-warning fw-bold" id="addTransactionModalLabel">Add Transaction</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="transaction-form">
+                <div class="modal-body">
+                    <!-- Transaction Type Picker -->
+                    <div class="mb-3">
+                        <label class="form-label">Transaction Type</label>
+                        <select id="transactionType" class="form-select">
+                            <option value="INCREASE" selected>Loan Increment</option>
+                            <option value="REPAYMENT">Repayment</option>
+                        </select>
+                    </div>
+
+                    <!-- Transaction Amount Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Transaction Amount</label>
+                        <div class="input-group">
+                            <input type="number" id="transactionAmount" class="form-control" placeholder="Enter amount">
+                            <span class="input-group-text">
+                                <i class="sar-icon"></i>SAR
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Date Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <div class="input-group">
+                            <input type="date" id="transactionDate" class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- Notes Field -->
+                    <div class="mb-3">
+                        <label class="form-label">Notes (optional)</label>
+                        <textarea id="transactionNotes" class="form-control" rows="2" placeholder="Notes about the transaction"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning w-100 text-white" style="border-radius: 25px;">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

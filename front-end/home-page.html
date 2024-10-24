@@ -18,7 +18,7 @@
 
         <!-- Notifications Section -->
         <h2 class="text-warning">Notifications</h2>
-        <div id="loading-indicator" class="loading-spinner" style="display: none;">Loading...</div>
+        <div id="loading-indicator-notifications-list" class="loading-spinner" style="display: none;">Loading...</div>
         <div id="notification-list">
             <!-- Notifications will be dynamically added here -->
         </div>
@@ -49,7 +49,7 @@
                 </ul>
             </div>
         </div>
-        <div id="loading-indicator" class="loading-spinner" style="display: none;">Loading...</div>
+        <div id="loading-indicator-loan-list" class="loading-spinner" style="display: none;">Loading...</div>
         <div class="card-container" id="loan-list">
 
         </div>
@@ -132,14 +132,16 @@
             })
             .catch(err => console.warn('Error loading modal:', err));
     </script>
-    <script>
-        fetch('dropdown-modal.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('modal-container').innerHTML = html;
-            })
-            .catch(err => console.warn('Error loading modal:', err));
-    </script>
+
+<script>
+    // Dynamically load the add transaction modal when needed
+    fetch('add-transaction-modal.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('modal-container').innerHTML = html;
+        })
+        .catch(err => console.warn('Error loading modal:', err));
+</script>
 </body>
 
 </html>

@@ -8,6 +8,7 @@ const connectDB = require('./db');
 const logger = require('./utils/logger');
 const authRouter = require('./routes/auth');
 const loansRouter = require('./routes/loans')
+const transactionsRouter = require('./routes/transactions');
 const morgan = require('morgan');
 
 
@@ -23,6 +24,7 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
 app.use('/auth', authRouter);
 app.use('/user/:userId/loans', loansRouter);
+app.use('/user/:userId/loans/:loanId/transactions', transactionsRouter);
 
 app.get('/', (req, res) => {
     res.send('Hellasdfo World!');

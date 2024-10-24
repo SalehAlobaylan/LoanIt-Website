@@ -1,4 +1,5 @@
 import { api } from './api.js';
+import { transactions } from './transactions.js';
 
 
 let loans = [];
@@ -33,19 +34,121 @@ function getStatusColor(status) {
     return statusColors[status] || '#A9A9A9'; // Default to DarkGray if status is unknown
 }
 
-function transactionsEventListener(loanCardHTML, _id) {
-    // Add event listener to the entire card
+function transactionsEventListener(loanCardHTML, _id, userId) {
     const cardElement = loanCardHTML.querySelector(`#card-${_id}`);
     const dropdownContent = loanCardHTML.querySelector(`#dropdownContent-${_id}`);
+    const addButton = loanCardHTML.querySelector(`#addButton-${_id}`);
+
+    if (!cardElement) return;
 
     cardElement.addEventListener('click', () => {
-        // Toggle visibility of transaction history
         if (dropdownContent.style.display === 'none') {
             dropdownContent.style.display = 'block';
+            getAllLoanTransactions(_id)
         } else {
             dropdownContent.style.display = 'none';
         }
     });
+
+    addButton.addEventListener('click', (event) => {
+        event.stopPropagation();
+
+        // Load the modal HTML and add form submission logic
+        fetch('add-transaction-modal.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('modal-container').innerHTML = html;
+                const transactionModal = new bootstrap.Modal(document.getElementById('addTransactionModal'));
+                transactionModal.show();
+
+                // Add event listener for the transaction form submission
+                const transactionForm = document.getElementById('transaction-form');
+                transactionForm.addEventListener('submit', function (e) {
+                    e.preventDefault();
+
+                    const transactionData = {
+                        type: document.getElementById('transactionType').value,
+                        amount: document.getElementById('transactionAmount').value,
+                        date: document.getElementById('transactionDate').value,
+                        notes: document.getElementById('transactionNotes').value,
+                    };
+
+                    // Submit transaction based on userId and loanId
+                    transactions.createTransaction(userId, _id, transactionData.type, transactionData.amount, transactionData.date, transactionData.notes)
+                        .then(() => {
+                            transactionModal.hide();  // Close the modal after successful submission
+                            getAllLoanTransactions(_id)
+                        })
+                        .catch((error) => {
+                            console.error('Error submitting transaction:', error);
+                        });
+                });
+            })
+            .catch(err => console.warn('Error loading transaction modal:', err));
+    });
+}
+
+
+async function getAllLoanTransactions(loanId) {
+    toggleLoading(`transaction-list-${loanId}`); // Show loading indicator
+    const userId = api.getUserId();
+    const transactionList = document.getElementById(`transactionList-${loanId}`);
+    const loanTransactions = await transactions.getAllTransactions(userId, loanId);
+
+    if (loanTransactions.length === 0) {
+        transactionList.innerHTML = '<p class="text-center" style="color: var(--text-secondary-color); margin: 50px 0px;">No transactions found</p>';
+        return;
+    }
+
+    transactionList.innerHTML = await loanTransactions.map(transaction => {
+        const { _id, type, amount, date, notes } = transaction;
+        const formattedDate = new Date(date).toLocaleDateString('en-GB');
+        
+        // Select appropriate icon based on transaction type
+        const icon = type === 'INCREASE' 
+            ? '<i class="bi bi-cash-coin" style="color: var(--lender-border);"></i>' // Loan increment icon
+            : '<i class="bi bi-cash-stack" style="color: var(--borrower-border);"></i>'; // Loan repayment icon
+    
+        // Select appropriate type label (translated)
+        const typeLabel = type === 'INCREASE' ? 'Additional Funds Provided' : 'Repayment Made';
+    
+        // Display notes better
+        const notesHTML = notes 
+            ? `<div class="transaction-notes">${notes}</div>` 
+            : '';
+    
+        // Determine the amount styling and label based on transaction type
+        const amountDisplay = type === 'INCREASE' 
+            ? `<div class="transaction-amount positive" style="white-space: nowrap; color: green;">${amount} SAR</div>` 
+            : `<div class="transaction-amount negative" style="white-space: nowrap; color: red;">${amount} SAR</div>`;
+    
+        return `
+            <div class="transaction my-3">
+                <!-- Transaction Row Layout -->
+                <div class="d-flex flex-column align-items-center justify-content-between">
+                    <!-- Icon and Transaction Details (Type and Date) -->
+                    <div class="d-flex justify-content-between align-items-center">
+                        <!-- Icon -->
+                        <div class="me-3" style="font-size: 24px;">
+                            ${icon}
+                        </div>
+                        <!-- Type and Date -->
+                        <div class="d-flex flex-column">
+                            <span class="transaction-type"><strong>${typeLabel}</strong></span>
+                            <!-- Notes -->
+                            ${notesHTML}
+                            <span class="transaction-date" style="color: var(--text-secondary-color); font-size: 0.9rem;">${formattedDate}</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Amount (Right-Aligned) -->
+                ${amountDisplay}
+            </div>
+        `;
+    }).join('');
+    
+    
+    toggleLoading(`transaction-list-${loanId}`); // Show loading indicator
 }
 
 // Helper function to render a loan card
@@ -58,7 +161,9 @@ function renderLoanCard(loan, userId, index = 0) {
     const progressPercentage = ((totalPaid / totalAmount) * 100).toFixed(1);
 
     const statusColor = getStatusColor(status);
-    const cardClass = status === 'PENDING' ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
+    const triangleImage = userRole === 'BORROWER' ? './resources/triangle-fill.svg' : './resources/triangle-fill-green.svg';
+    const triangleDgree = userRole === 'BORROWER' ? 'rotate(180deg)' : 'rotate(0deg)';
+    const cardClass = (status === 'PENDING' || status === 'REJECTED') ? 'card-disabled' : (userRole === 'BORROWER' ? 'card-borrower' : 'card-lender');
     const progressBarColor = userRole === 'BORROWER' ? 'progress-bar-lender' : 'progress-bar-lender';
 
     const animationDelay = `${index * 0.1}s`;
@@ -77,7 +182,7 @@ function renderLoanCard(loan, userId, index = 0) {
                         <p class="card-subtitle" style="color: var(--text-color);">${otherPartyName}</p>
                     </div>
                     <div>
-                        <img style="transform: rotate(180deg); padding-left: 5px;" src="./resources/triangle-fill.svg" alt="Dropdown Arrow">
+                        <img style="transform: ${triangleDgree}; padding-left: 5px;" src=${triangleImage} alt="Dropdown Arrow">
                         <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
                     </div>
                 </div>
@@ -92,10 +197,13 @@ function renderLoanCard(loan, userId, index = 0) {
 
                 <!-- Dropdown Modal for Transaction History -->
                 <div class="dropdown-modal-content" id="dropdownContent-${_id}" style="display: none;">
-                    <div class="dropdown-modal-header">
+                    <div class="dropdown-modal-header d-flex justify-content-between align-items-center">
                         <span class="dropdown-modal-title" style="color: var(--text-color);">Transactions history</span>
-                        <button class="dropdown-modal-icon-button" id="addButton-${_id}" style="color: var(--text-color); font-size:30px;">+</button>
+                        <button class="dropdown-modal-icon-button" id="addButton-${_id}" style="background: none; border: none; color: var(--text-color);">
+                            <i class="bi bi-plus-circle" style="font-size: 20px;"></i>
+                        </button>
                     </div>
+                    <div id="loading-indicator-transaction-list-${_id}" class="loading-spinner" style="display: none;">Loading...</div>
                     <div id="transactionList-${_id}">
                         <!-- Transactions will be inserted here dynamically by JavaScript -->
                     </div>
@@ -107,7 +215,7 @@ function renderLoanCard(loan, userId, index = 0) {
 
 
     // Add event listener to the entire card
-    transactionsEventListener(loanCardHTML, _id);
+    transactionsEventListener(loanCardHTML, _id, userId);
 
 
     return loanCardHTML;
@@ -133,10 +241,10 @@ function loadNotifications(loan) {
 
     notifications.forEach(notification => {
         const notificationCard = document.createElement('div');
-        notificationCard.classList.add('card', 'my-2');
+        notificationCard.classList.add('card', 'my-2', "fade-in", "slide-in");
 
         notificationCard.innerHTML = `
-            <div class="card-body-note d-flex justify-content-between fade-in slide-in">
+            <div class="card-body-note d-flex justify-content-between">
                 <div class="d-flex flex-column justify-content-center">
                     <span class="badge ${notification.badgeClass} mb-2" style="max-width: 80px; text-align: center;">${notification.type}</span>
                     <p style="color: var(--text-color);">${notification.message}</p>
@@ -205,7 +313,7 @@ function toggleHiddenLoans() {
     if (hiddenLoanList.style.display === 'none') {
         hiddenLoanList.innerHTML = loans
             .filter(loan => loan.isHidden)
-            .map((loan, index) => renderLoanCard(loan, userId, index))
+            .map((loan, index) => renderLoanCard(loan, userId, index).innerHTML)
             .join(''); // Generate loan cards and inject them
         hiddenLoanList.style.display = 'block';
         toggleButton.innerHTML = 'Hide hidden loans';
@@ -215,20 +323,21 @@ function toggleHiddenLoans() {
     }
 }
 
-function toggleLoading(){
+function toggleLoading(forSpinnerId){
     // toggling for all elements that has the loading spinner class
-    const loadingIndicator = document.getElementsByClassName('loading-spinner');
-    for (let i = 0; i < loadingIndicator.length; i++) {
-        if (loadingIndicator[i].style.display === 'block') {
-            loadingIndicator[i].style.display = 'none';
-        } else {
-            loadingIndicator[i].style.display = 'block';
-        }
+    const loadingIndicator = document.getElementById(`loading-indicator-${forSpinnerId}`);
+
+    if (!loadingIndicator) return;
+
+    if (loadingIndicator.style.display === 'block') {
+        loadingIndicator.style.display = 'none';
+    } else {
+        loadingIndicator.style.display = 'block';
     }
 
     // hide id="modal-container" when loading
     const modalContainer = document.getElementById('modal-container');
-    if (modalContainer) {
+    if (modalContainer && forSpinnerId == 'loan-list') { 
         modalContainer.style.display = modalContainer.style.display === 'none' ? 'block' : 'none';
     }
 }
@@ -238,7 +347,8 @@ async function getAllLoans() {
 
     try {
         // Show the loading indicator and clear the existing loan list
-        toggleLoading();
+        toggleLoading("loan-list");
+        toggleLoading("notifications-list");
         loanList.innerHTML = ''; 
 
         const userId = api.getUserId();  // Get current user's ID
@@ -249,8 +359,10 @@ async function getAllLoans() {
         loanList.innerHTML = ''; // Clear existing loans again, though this is redundant after the earlier line
 
         loans.forEach((loan, index) => {
-            const loanCardHTML = renderLoanCard(loan, userId, index);
-            loanList.insertAdjacentElement('beforeend', loanCardHTML);
+            if(!loan.isHidden) {
+                const loanCardHTML = renderLoanCard(loan, userId, index);
+                loanList.insertAdjacentElement('beforeend', loanCardHTML);
+            }
 
             if (userId === loan.partyId && loan.status === "PENDING") {
                 hasNotifications = true;
@@ -265,11 +377,16 @@ async function getAllLoans() {
                 notificationList.innerHTML = '<p class="text-center" style="color: var(--text-secondary-color); margin: 50px 0px;">No new notifications</p>';
             }
         }
+
+        if (loans.some(loan => loan.isHidden)) {
+            presentShowHiddenLoans();
+        }
     } catch (error) {
         console.error('Error getting loans:', error.message);
     } finally {
         // Hide the loading indicator after data is loaded
-        toggleLoading();
+        toggleLoading("loan-list");
+        toggleLoading("notifications-list");
     }
 }
 
@@ -323,7 +440,7 @@ function sortLoans(e) {
         
         if (!loan.isHidden) {
         const loanCardHTML = renderLoanCard(loan, userId, index);
-        loanList.insertAdjacentHTML('beforeend', loanCardHTML);
+        loanList.insertAdjacentElement('beforeend', loanCardHTML);
         }
     });
 }

@@ -1,12 +1,16 @@
 const Transaction = require('../datamodels/Transaction');
 const Loan = require('../datamodels/Loan');
+const { getLoanById } = require('./loanService');
 
 // Service to create a transaction
 async function createTransaction(userId, loanId, type, amount, date, notes) {
     try {
-        const loan = await Loan.findById(loanId);  
+        const loan = await getLoanById(loanId);
         if (!loan) {
             throw new Error('LOAN_008');  // Throw an error if loan not found
+        }
+        if (type === 'repayment' && amount > loan.remainingAmount) {
+            throw new Error('TRANS_007')
         }
 
         const transaction = new Transaction({ 
@@ -39,7 +43,20 @@ async function getTransactionsByLoanId(loanId) {
     }
 }
 
+async function deleteTransaction(transactionId) {
+    try {
+        const transaction = await Transaction.findById(transactionId);
+        if (!transaction) {
+            throw new Error('TRANS_006')
+        }
+        await transaction.delete();
+        return transaction;
+    } catch (error) {
+        throw error;
+    }
+}
 module.exports = {
     createTransaction,
     getTransactionsByLoanId,
+    deleteTransaction
 };

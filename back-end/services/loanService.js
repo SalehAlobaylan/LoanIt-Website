@@ -1,7 +1,7 @@
 const Loan = require('../datamodels/Loan');
 const Transaction = require('../datamodels/Transaction');
 const { getUserById, getUserByPhoneNumber } = require('./userService');
-const { getTransactionsByLoanId } = require('./transactionService');
+// const { getTransactionsByLoanId } = require('./transactionService');
 
 // Function to create a loan
 async function createLoan(userId, partyPhoneNumber, role, title, amount, date, notes) {
@@ -100,6 +100,24 @@ async function getLoanById(loanId) {
         if (!loan) {
             throw new Error('LOAN_008');
         }
+
+
+        // Fetch associated transactions
+        const transactions = await Transaction.find({ loanId: loan._id });
+        loan.transactions = transactions;
+
+        // Calculate amounts based on transactions
+        const amounts = calculateAmounts(transactions);
+        loan.totalAmount = amounts.totalAmount;
+        loan.totalPaid = amounts.totalPaid;
+        loan.remainingAmount = amounts.remainingAmount;
+
+        // Determine loan status
+        loan.status = getLoanStatus(loan);
+
+        // Optionally, remove transactions if not needed in the response
+        loan.transactions = null;
+
         return loan;
     } catch (error) {
         throw error;
@@ -147,7 +165,7 @@ async function getLoansByUserId(userId) {
 
         for (let loanDoc of loans) {
             let loan = loanDoc.toObject();
-            const transactions = await getTransactionsByLoanId(loan._id);
+            const transactions = await Transaction.find({ loanId: loan._id });
             loan.transactions = transactions;
             const amounts = calculateAmounts(transactions);
             loan.totalAmount = amounts.totalAmount;
