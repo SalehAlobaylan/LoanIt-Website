@@ -1,0 +1,182 @@
+:root {
+    --background-color: #ffffff;
+    --card-background: #fcfcfc;
+    --text-color: #000000;
+    --text-secondary-color: #717171;
+    --card-shadow: rgba(0, 0, 0, 0.1);
+    --primary-color: #ffc107;
+    --footer-border: #e0e0e0;
+}
+
+body.dark-mode {
+    --background-color: #171717;
+    --card-background: #282828;
+    --text-color: #ffffff;
+    --text-secondary-color: #a0a0a0;
+    --card-shadow: rgba(48, 48, 48, 0.1);
+    --primary-color: #ffca28;
+    --footer-border: #505050;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    padding-bottom: 6rem;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+.back-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 300;
+    font-size: 28px;
+    color: var(--text-color);
+}
+
+.box {
+    background: var(--card-background);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    box-shadow: 0 3px 8px var(--card-shadow);
+}
+
+.edit-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--text-secondary-color);
+    padding: 12px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group:last-child {
+    margin-bottom: 0;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-secondary-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background: var(--background-color);
+    border-radius: 8px;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.phone-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.phone-inputs input:first-child {
+    width: 80px;
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    padding-right: 40px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: var(--text-secondary-color);
+    z-index: 1;
+}
+
+.analytics-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.analytics-items {
+    display: block;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.analytics-item {
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.loans { color: #4a90e2; }
+.owe { color: #ff7f50; }
+.owed { color: #ffd700; }
+
+.donut-chart {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+}
+
+.donut-chart svg {
+    transform: rotate(-90deg);
+}
+
+.chart-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.owed-circle {
+    stroke: #ff7f50;
+}
+
+.owing-circle {
+    stroke: #ffd700;
+}

@@ -143,42 +143,6 @@ body {
     background-color: var(--lender-border) !important;
 }
 
-/* Footer Styling */
-.footer-container {
-    border-top: 2px solid var(--footer-border);
-    border-radius: 20px;
-    background-color: var(--card-background);
-    margin: 20px;
-}
-
-footer .text-center button {
-    margin: 0;
-    font-size: 14px;
-    font-weight: bold;
-    background-color: transparent;
-    border: none;
-    color: var(--text-color);
-}
-
-footer .text-center i {
-    font-size: 1.5rem;
-    color: var(--text-color);
-}
-
-footer a {
-    color: var(--footer-link-color);
-    text-decoration: none;
-}
-
-footer a:hover {
-    color: var(--footer-link-hover-color);
-    text-decoration: underline;
-}
-
-.img {
-    height: 2rem;
-    float: left;
-}
 /* Fading and Sliding Animations */
 @keyframes fadeIn {
     from {
@@ -301,7 +265,7 @@ body.dark-mode select.form-select::placeholder {
     justify-content: space-between;
     align-items: center;
     border-bottom: gray 1px solid;
-    padding: 8px 16px;
+    padding: 4px 4px;
     margin-bottom: 8px;
     color: var(--text-color);
 }
@@ -312,6 +276,10 @@ body.dark-mode select.form-select::placeholder {
 
 .transaction-name {
     font-weight: bold;
+}
+
+.transaction-type {
+    font-size: 12px;
 }
 
 .dropdown-modal-transaction-date {

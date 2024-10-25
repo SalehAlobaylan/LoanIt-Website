@@ -131,4 +131,5 @@ export const api = {
     isAuthenticated,
     logout,
     getUserId,
+    getUser
 };

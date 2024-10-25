@@ -6,231 +6,8 @@
     <title>Profile Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        :root {
-            --background-color: #ffffff;
-            --card-background: #fcfcfc;
-            --text-color: #000000;
-            --text-secondary-color: #717171;
-            --card-shadow: rgba(0, 0, 0, 0.1);
-            --primary-color: #ffc107;
-            --footer-border: #e0e0e0;
-        }
-
-        body.dark-mode {
-            --background-color: #171717;
-            --card-background: #282828;
-            --text-color: #ffffff;
-            --text-secondary-color: #a0a0a0;
-            --card-shadow: rgba(48, 48, 48, 0.1);
-            --primary-color: #ffca28;
-            --footer-border: #505050;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-        }
-
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            padding-bottom: 6rem;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: var(--primary-color);
-            font-size: 24px;
-        }
-
-        .back-btn {
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-weight: 300;
-            font-size: 28px;
-            color: var(--text-color);
-        }
-
-        .box {
-            background: var(--card-background);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            position: relative;
-            box-shadow: 0 3px 8px var(--card-shadow);
-        }
-
-        .edit-btn {
-            position: absolute;
-            top: 0;
-            right: 0;
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 18px;
-            color: var(--text-secondary-color);
-            padding: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: var(--text-secondary-color);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            background: var(--background-color);
-            border-radius: 8px;
-            font-size: 16px;
-            color: var(--text-color);
-        }
-
-        .phone-inputs {
-            display: flex;
-            gap: 10px;
-        }
-
-        .phone-inputs input:first-child {
-            width: 80px;
-        }
-
-        .password-container {
-            position: relative;
-        }
-
-        .password-container input {
-            padding-right: 40px;
-        }
-
-        .toggle-password {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: var(--text-secondary-color);
-            z-index: 1;
-        }
-
-        .analytics-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
-
-        .analytics-item {
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-
-        .loans { color: #4a90e2; }
-        .owe { color: #ff7f50; }
-        .owed { color: #ffd700; }
-
-        .footer-container {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            border-top: 2px solid var(--footer-border);
-            border-radius: 20px 20px 0 0;
-            background-color: var(--primary-color);
-            margin: 0 20px;
-            padding: 8px 0;
-            z-index: 4;
-        }
-
-        footer .container .d-flex {
-        align-items: center;
-        }
-
-        footer .text-center {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        }
-
-        .img {
-            height: 2rem;
-            float: left;
-        }
-
-        footer .text-center button {
-            margin: 0;
-            font-size: 14px;
-            font-weight: bold;
-            background-color: transparent;
-            border: none;
-            color: var(--footer-text-color);
-            padding: 0;
-        }
-
-        footer .text-center i {
-            font-size: 1.5rem;
-            color: var(--footer-text-color);
-        }
-
-        footer a {
-            text-decoration: none !important;
-            color: var(--footer-text-color) !important;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        footer a:hover {
-            color: var(--footer-text-color) !important;
-        }
-
-        .donut-chart {
-            width: 150px;
-            height: 150px;
-            margin: 30px auto 0;
-            position: relative;
-        }
-
-        .donut-chart svg {
-            transform: rotate(-90deg);
-        }
-
-        .chart-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            font-weight: bold;
-            color: var(--text-color);
-        }
-    </style>
+    <link rel="stylesheet" href="footer.css">
+    <link rel="stylesheet" href="profile.css">
 </head>
 <body class="dark-mode">
     <div class="container mt-4">
@@ -238,20 +15,33 @@
             <button class="back-btn">‹</button>
             <h1>Profile</h1>
             <div style="width: 24px;"></div>
-        </div>
-        <div class="box">
+        </div><div class="box">
             <h2 class="analytics-title">Analytics</h2>
-            <div class="analytics-item loans">You have : 4 Loans</div>
-            <div class="analytics-item owe">You owe : 20000 SAR</div>
-            <div class="analytics-item owed">Your owed : 4200 SAR</div>
-
+            
+            <!-- Analytics Items -->
+            <div class="analytics-items">
+                <div class="analytics-item loans">
+                    You have: <span id="total-loans">4</span> Loans
+                </div>
+                <div class="analytics-item owe">
+                    You owe: <span id="total-owe">7500</span> SAR
+                </div>
+                <div class="analytics-item owed">
+                    You're owed: <span id="total-owed">2500</span> SAR
+                </div>
+            </div>
+            
+            <!-- Donut Chart -->
             <div class="donut-chart">
                 <svg width="100%" height="100%" viewBox="0 0 36 36">
+                    <!-- Base circle -->
                     <circle cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#f0f0f0" stroke-width="3"/>
-                    <circle cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#ff7f50" stroke-width="3" stroke-dasharray="75 100"/>
-                    <circle cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#ffd700" stroke-width="3" stroke-dasharray="25 100" stroke-dashoffset="-75"/>
+                    <!-- Owed Circle -->
+                    <circle class="owed-circle" cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#ff7f50" stroke-width="3" stroke-dasharray="75 100"/>
+                    <!-- Owing Circle -->
+                    <circle class="owing-circle" cx="18" cy="18" r="15.91549430918954" fill="transparent" stroke="#ffd700" stroke-width="3" stroke-dasharray="25 100" stroke-dashoffset="-75"/>
                 </svg>
-                <div class="chart-center">24.2K</div>
+                <div class="chart-center">10K SAR</div>
             </div>
         </div>
 
@@ -263,24 +53,8 @@
             </div>
 
             <div class="form-group">
-                <label>Your Phone number</label>
-                <div class="phone-inputs">
-                    <input type="text" value="+966" readonly>
-                    <input type="text" value="51234567" readonly>
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label>Your Email</label>
                 <input type="email" value="yourEmail@gmail.com" readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Your password</label>
-                <div class="password-container">
-                    <input type="password" value="************" readonly>
-                    <i class="bi bi-eye-fill toggle-password"></i>
-                </div>
             </div>
         </div>
 
@@ -295,33 +69,39 @@
                 <div class="text-center">
                     <img class="img" src="./resources/TNMWCH01.svg">
                 </div>
-                <!-- Loans Icon & Text -->
+                <!-- Loans Icon & Text (Active by default) -->
                 <div class="text-center">
                     <a href="/front-end/home-page.html" class="text-decoration-none text-dark">
-                        <i class="bi bi-wallet-fill"></i>
-                        <button type="button" class="btn">Loans</button>
+                        <button type="button" class="btn d-flex flex-column align-items-center">
+                            <i class="bi bi-wallet-fill"></i>
+                            <span>Loans</span>
+                        </button>
                     </a>
                 </div>
                 <!-- Profile Icon & Text -->
                 <div class="text-center">
-                    <a href="/front-end/Profile-Page.html" class="text-decoration-none text-dark">
-                        <i class="bi bi-person-fill"></i>
-                        <button type="button" class="btn">Profile</button>
-                    </a>
-                </div>
-                <!-- Sign out -->
-                <div class="text-center">
-                    <a href="#signout" class="text-decoration-none text-dark">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <button type="button" id="signout" class="btn">Sign Out</button>
+                    <a href="/front-end/Profile-Page.html" class="text-decoration-none text-dark active">
+                        <button type="button" class="btn d-flex flex-column align-items-center">
+                            <i class="bi bi-person-fill"></i>
+                            <span>Profile</span>
+                        </button>
                     </a>
                 </div>
                 <!-- Dark Mode Toggle Icon & Text -->
                 <div class="text-center">
-                    <i id="themeIcon" class="bi bi-moon-fill" style="font-size: 1.5rem;"></i>
-
-                    <button type="button" id="toggleDarkMode" class="btn" style="background-color: transparent;">theme
+                    <button type="button" id="toggleDarkMode" class="btn d-flex flex-column align-items-center" style="background-color: transparent;">
+                        <i id="themeIcon" class="bi bi-moon-fill" style="font-size: 1.5rem;"></i>
+                        <span>Theme</span>
                     </button>
+                </div>
+                <!-- Sign out -->
+                <div class="text-center">
+                    <a href="#signout" class="text-decoration-none text-dark">
+                        <button type="button" id="signout" class="btn d-flex flex-column align-items-center">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -342,14 +122,9 @@
             }
         });
 
-        togglePassword.addEventListener('click', () => {
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            togglePassword.classList.toggle('bi-eye-fill');
-            togglePassword.classList.toggle('bi-eye-slash-fill');
-        });
     </script>
 
+<script type="module" src="js/profile.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

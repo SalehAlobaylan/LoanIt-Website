@@ -1,0 +1,42 @@
+
+/* Footer Styling */
+.footer-container {
+    border-top: 2px solid var(--footer-border);
+    border-radius: 20px;
+    background-color: var(--card-background);
+    margin: 20px;
+}
+
+footer .text-center button {
+    margin: 0;
+    font-size: 0px;
+    font-weight: bold;
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+}
+
+footer .text-center i {
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+footer a {
+    color: var(--footer-link-color);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--footer-link-hover-color);
+    text-decoration: underline;
+}
+
+/* Styling for the active tab */
+footer .text-center a.active button {
+    font-size: 14px;
+}
+
+.img {
+    height: 2rem;
+    float: left;
+}

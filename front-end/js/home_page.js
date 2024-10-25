@@ -37,11 +37,10 @@ function getStatusColor(status) {
 function openLoanTransactionModal(loanCardHTML, _id) {
     const cardElement = loanCardHTML.querySelector(`#card-${_id}`);
     const dropdownContent = loanCardHTML.querySelector(`#dropdownContent-${_id}`);
-    console.log(cardElement, dropdownContent);
+
     if (!cardElement) return;
-    console.log('adding event listener to the found card element', dropdownContent);
+
     cardElement.addEventListener('click', () => {
-        console.log(dropdownContent.classList)
         if (dropdownContent.classList.contains('open')) {
             dropdownContent.classList.remove('open');
         } else {
@@ -53,7 +52,6 @@ function openLoanTransactionModal(loanCardHTML, _id) {
 
 function transactionsEventListener(loanCardHTML, _id, userId) {
     const addButton = loanCardHTML.querySelector(`#addButton-${_id}`);
-    console.log(loanCardHTML, _id, userId);
     openLoanTransactionModal(loanCardHTML, _id);
 
     addButton.addEventListener('click', (event) => {
@@ -169,7 +167,7 @@ async function getAllLoanTransactions(loanId) {
             : '<i class="bi bi-cash-stack" style="color: var(--borrower-border);"></i>'; // Loan repayment icon
     
         // Select appropriate type label (translated)
-        const typeLabel = type === 'INCREASE' ? 'Additional Funds Provided' : 'Repayment Made';
+        const typeLabel = type === 'INCREASE' ? 'Additional Funds' : 'Repayment';
     
         // Display notes better
         const notesHTML = notes 
@@ -349,7 +347,6 @@ function loadNotifications(loan) {
 
 async function handleLoanAction(loanId, status, notificationCard, loan = null) {
     const userId = api.getUserId(); 
-    console.log(`Updating loan ID: ${loanId}, Status: ${status}`);  // Debugging log
 
     const response = await api.patch(`/user/${userId}/loans/${loanId}`, { status })
 
@@ -481,7 +478,6 @@ function sortLoans(e) {
 
     // we are not geting the loans in the loan list
     // let's print somethign that may help us identify the issue
-    console.log(loans);
 
 
     if (sortType == 'amount' || sortType == 'date') {
