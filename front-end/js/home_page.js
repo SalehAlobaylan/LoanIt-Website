@@ -34,14 +34,14 @@ function getStatusColor(status) {
     return statusColors[status] || '#A9A9A9'; // Default to DarkGray if status is unknown
 }
 
-function transactionsEventListener(loanCardHTML, _id, userId) {
+function openLoanTransactionModal(loanCardHTML, _id) {
     const cardElement = loanCardHTML.querySelector(`#card-${_id}`);
     const dropdownContent = loanCardHTML.querySelector(`#dropdownContent-${_id}`);
-    const addButton = loanCardHTML.querySelector(`#addButton-${_id}`);
-
+    console.log(cardElement, dropdownContent);
     if (!cardElement) return;
-
+    console.log('adding event listener to the found card element', dropdownContent);
     cardElement.addEventListener('click', () => {
+        console.log(dropdownContent.classList)
         if (dropdownContent.classList.contains('open')) {
             dropdownContent.classList.remove('open');
         } else {
@@ -49,6 +49,13 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
             getAllLoanTransactions(_id);
         }
     });
+}
+
+function transactionsEventListener(loanCardHTML, _id, userId) {
+    const addButton = loanCardHTML.querySelector(`#addButton-${_id}`);
+    console.log(loanCardHTML, _id, userId);
+    openLoanTransactionModal(loanCardHTML, _id);
+
     addButton.addEventListener('click', (event) => {
         event.stopPropagation();
 
@@ -97,39 +104,45 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
             .catch(err => console.warn('Error loading transaction modal:', err));
     });
 }
-
 async function updateLoan(loanId) {
     try {
-        // Get the current user ID and fetch the updated loan data
         const userId = api.getUserId();
         const response = await api.get(`/user/${userId}/loans/${loanId}`);
         const updatedLoan = response.data;
 
-        // Get the loan list and find the specific loan card and its index in the loans array
-        const loanList = document.getElementById('loan-list');
-        const loanCard = loanList.querySelector(`#card-${loanId}`);
-        const loanIndex = loans.findIndex(loan => loan._id === loanId);
-
-        // Remove the existing loan card from the UI
-        if (loanCard) {
-            loanCard.remove();
-        }
-
-        // Update the loan data in the loans array
-        if (loanIndex !== -1) {
-            loans[loanIndex] = updatedLoan;
-        } else {
-            loans.push(updatedLoan);
-        }
-
-        // Render the updated loan card and insert it into the loan list
-        const loanCardHTML = renderLoanCard(updatedLoan, userId, loanIndex !== -1 ? loanIndex : loans.length - 1);
-        loanList.insertAdjacentElement('afterbegin', loanCardHTML);
+        const loanCardContainer = document.getElementById(`card-${loanId}`);
         
+        if (loanCardContainer) {
+            // Update the status badge
+            const statusBadge = document.getElementById(`status-badge-${loanId}`);
+            const statusColor = getStatusColor(updatedLoan.status);
+            statusBadge.innerText = updatedLoan.status;
+            statusBadge.style.backgroundColor = statusColor;
+
+            // Update the progress bar
+            const progressBar = document.getElementById(`progress-bar-${loanId}`);
+            const progressPercentage = ((updatedLoan.totalPaid / updatedLoan.totalAmount) * 100).toFixed(1);
+            progressBar.style.width = `${progressPercentage}%`;
+
+            // Update the paid amount
+            const paidAmount = document.getElementById(`paid-amount-${loanId}`);
+            paidAmount.innerText = `${updatedLoan.totalPaid} SAR`;
+
+            // Update the total amount
+            const totalAmount = document.getElementById(`total-amount-${loanId}`);
+            totalAmount.innerText = `${updatedLoan.totalAmount} SAR`;
+        } else {
+            // If the loan card doesn't exist, add it to the loan list
+            const loanList = document.getElementById('loan-list');
+            const loanCardHTML = renderLoanCard(updatedLoan, userId, loans.length - 1);
+            loanList.insertAdjacentElement('afterbegin', loanCardHTML);
+        }
+
     } catch (error) {
         console.error('Error updating loan:', error.message);
     }
 }
+
 
 async function getAllLoanTransactions(loanId) {
     toggleLoading(`transaction-list-${loanId}`); // Show loading indicator
@@ -188,11 +201,11 @@ async function getAllLoanTransactions(loanId) {
                     </div>
                 </div>
                 <!-- Amount (Right-Aligned) -->
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-center">
                 ${amountDisplay}
                     <!-- Delete Button with Trash Icon -->
                     <button class="btn-delete-transaction" data-transaction-id="${_id}" style="border: none; background: transparent;">
-                        <i class="bi bi-trash" style="color: red; font-size: 20px;"></i>
+                        <i class="bi bi-trash" style="color: red; font-size: 24px;"></i>
                     </button>
                 </div>
             </div>
@@ -249,15 +262,15 @@ function renderLoanCard(loan, userId, index = 0) {
                     </div>
                     <div>
                         <img style="transform: ${triangleDgree}; padding-left: 5px;" src=${triangleImage} alt="Dropdown Arrow">
-                        <span class="badge rounded-pill" style="background-color: ${statusColor} !important;">${status}</span>
+                        <span class="badge rounded-pill" id="status-badge-${_id}" style="background-color: ${statusColor} !important;">${status}</span>
                     </div>
                 </div>
                 <div class="progress my-2">
-                    <div class="${progressBarColor}" style="width: ${progressPercentage}%;"></div>
+                    <div id="progress-bar-${_id}" class="${progressBarColor}" style="width: ${progressPercentage}%;"></div>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <span style="color: var(--text-color);">${totalPaid} SAR</span>
-                    <span style="color: var(--text-color);">${totalAmount} SAR</span>
+                    <span id="paid-amount-${_id}" style="color: var(--text-color);">${totalPaid} SAR</span>
+                    <span id="total-amount-${_id}" style="color: var(--text-color);">${totalAmount} SAR</span>
                 </div>
                 <p style="color: var(--text-secondary-color);">Initiated ${formattedDate}</p>
 
@@ -286,6 +299,7 @@ function renderLoanCard(loan, userId, index = 0) {
 
     return loanCardHTML;
 }
+
 
 function loadNotifications(loan) {
     const notificationList = document.getElementById('notification-list');
@@ -352,6 +366,8 @@ async function handleLoanAction(loanId, status, notificationCard, loan = null) {
             const loanCardHTML = renderLoanCard(loan, userId);
             const loanList = document.getElementById('loan-list');
             loanList.insertAdjacentHTML('afterbegin', loanCardHTML);
+        } else if (status === 'REJECTED') {
+            window.location.reload();
         }
     }
 }

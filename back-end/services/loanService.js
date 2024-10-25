@@ -96,11 +96,11 @@ async function hideLoan(userId, loanId, isHidden) {
 // Function to fetch a loan by ID
 async function getLoanById(loanId) {
     try {
-        const loan = await Loan.findById(loanId);
+        let loan = await Loan.findById(loanId)
         if (!loan) {
             throw new Error('LOAN_008');
         }
-
+        loan = loan.toObject();
 
         // Fetch associated transactions
         const transactions = await Transaction.find({ loanId: loan._id });
@@ -108,6 +108,7 @@ async function getLoanById(loanId) {
 
         // Calculate amounts based on transactions
         const amounts = calculateAmounts(transactions);
+        console.log("calculateAmounts(transactions)", amounts)
         loan.totalAmount = amounts.totalAmount;
         loan.totalPaid = amounts.totalPaid;
         loan.remainingAmount = amounts.remainingAmount;
@@ -117,7 +118,7 @@ async function getLoanById(loanId) {
 
         // Optionally, remove transactions if not needed in the response
         loan.transactions = null;
-
+        console.log("loan", loan)
         return loan;
     } catch (error) {
         throw error;
