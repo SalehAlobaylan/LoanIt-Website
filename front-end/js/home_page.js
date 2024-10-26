@@ -305,7 +305,10 @@ function renderLoanCard(loan, userId, index = 0) {
 
 
     // Add event listener to the entire card
-    transactionsEventListener(loanCardHTML, _id, userId);
+    if (status !== 'PENDING' && status !== 'REJECTED') {
+        transactionsEventListener(loanCardHTML, _id, userId); 
+}
+
 
 
     return loanCardHTML;
