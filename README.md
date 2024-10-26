@@ -7,5 +7,8 @@
         00000000
 
 
+## the presentation:
+https://www.canva.com/design/DAGUaVrEuNw/eWrY7NFl7ZVQ-p128HmYbQ/view?utm_content=DAGUaVrEuNw&utm_campaign=designshare&utm_medium=link&utm_source=editor
+
 ## the pattern and designing stage:
 https://www.figma.com/design/mLWnqCRJTOYUqzVrz5RNqY/Loanit?node-id=0-1&node-type=canvas&t=wXmO2oEmV4V4eV2g-0
