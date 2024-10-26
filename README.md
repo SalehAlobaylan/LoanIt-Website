@@ -2,9 +2,9 @@
 https://loanitt.saudmt.com/
 ### Default users which has ready contributed examples demostrates the multipule users intractions in the website (Or you can create your user then create loans with other user)
 #### Phone number:
-   555555555
+        555555555
 #### Password:
-  00000000
+        00000000
 
 
 ## the pattern and designing stage:
