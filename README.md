@@ -1,4 +1,4 @@
-## To use the actual project directly:
+## To use the actual project directly: https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/front-end/resources/TitiledLogo-removebg-preview.png
 ## https://loanitt.saudmt.com/
 ### Default user which has ready contributed examples demostrates the multipule users intractions in the website (Or you can create your user then create loans with other user)
 #### Phone number:
