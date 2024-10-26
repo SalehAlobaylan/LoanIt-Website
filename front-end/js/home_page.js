@@ -376,10 +376,11 @@ async function handleLoanAction(loanId, status, notificationCard, loan = null) {
             notificationCard.remove();
 
             if (status === 'ACTIVE') {
+                console.log("fjkdsl")
                 loan.status = 'ACTIVE';
                 const loanCardHTML = renderLoanCard(loan, userId);
                 const loanList = document.getElementById('loan-list');
-                loanList.insertAdjacentHTML('afterbegin', loanCardHTML);
+                loanList.insertAdjacentElement('afterbegin', loanCardHTML);
             } else if (status === 'REJECTED') {
                 window.location.reload();
             }
@@ -459,7 +460,7 @@ async function getAllLoans() {
 
         loans.forEach((loan, index) => {
             const isOwner = userId === loan.ownerId;
-            if(!loan.isHidden && loan.status !== 'REJECTED' || (isOwner && loan.status === 'PENDING')) {
+            if(!loan.isHidden && loan.status !== 'REJECTED' && (isOwner || loan.status !== 'PENDING')) {
                 const loanCardHTML = renderLoanCard(loan, userId, index);
                 loanList.insertAdjacentElement('beforeend', loanCardHTML);
             }
