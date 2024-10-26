@@ -7,7 +7,7 @@
         00000000
 
 
-## the presentaion:
+## the presentation:
 https://www.canva.com/design/DAGUaVrEuNw/eWrY7NFl7ZVQ-p128HmYbQ/view?utm_content=DAGUaVrEuNw&utm_campaign=designshare&utm_medium=link&utm_source=editor
 
 ## the pattern and designing stage:
