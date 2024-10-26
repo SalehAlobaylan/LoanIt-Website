@@ -7,7 +7,7 @@ async function createTransaction(userId, loanId, type, amount, date, notes) {
         })
         return data.data
     } catch (error) {
-        console.error('Transaction creation error:', error.message);
+        presentError(error);
     }
 }
 
@@ -17,7 +17,7 @@ async function getAllTransactions(userId, loanId) {
        
         return data.data;
     } catch (error) {
-        console.error('Error getting transactions:', error.message);
+        presentError(error);
     }
 }
 
@@ -27,7 +27,7 @@ async function deleteTransaction(userId, loanId, transactionId) {
         console.log(data)
         return data.status == 204;
     } catch (error) {
-        console.error('Error deleting transaction:', error.message);
+        presentError(error);
     }
 }  
 

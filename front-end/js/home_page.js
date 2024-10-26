@@ -116,7 +116,7 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
                         });
                 });
             })
-            .catch(err => console.warn('Error loading transaction modal:', err));
+            .catch(err => {presentError(err)});
     });
 }
 async function updateLoan(loanId) {
@@ -154,7 +154,7 @@ async function updateLoan(loanId) {
         }
 
     } catch (error) {
-        console.error('Error updating loan:', error.message);
+        presentError(error);
     }
 }
 
@@ -232,13 +232,9 @@ async function getAllLoanTransactions(loanId) {
         button.addEventListener('click', async function(event) {
             event.stopPropagation();  // Prevent triggering the parent click event
             const transactionId = button.getAttribute('data-transaction-id');
-            try {
-                if (await transactions.deleteTransaction(userId, loanId, transactionId)){
-                    updateLoan(loanId);
-                    document.getElementById(transactionId).remove();
-                }
-            } catch (error) {
-                console.error('Error deleting transaction:', error);
+            if (await transactions.deleteTransaction(userId, loanId, transactionId)){
+                updateLoan(loanId);
+                document.getElementById(transactionId).remove();
             }
         });
     });
@@ -363,26 +359,30 @@ function loadNotifications(loan) {
 
 
 async function handleLoanAction(loanId, status, notificationCard, loan = null) {
-    const userId = api.getUserId(); 
+    try {
+        const userId = api.getUserId(); 
 
-    const response = await api.patch(`/user/${userId}/loans/${loanId}`, { status })
+        const response = await api.patch(`/user/${userId}/loans/${loanId}`, { status })
 
-    if (response.status === 204) {
-        Swal.fire({
-            icon: 'success',
-            title: `Loan ${status.toLowerCase()}ed successfully`
-        })
+        if (response.status === 204) {
+            Swal.fire({
+                icon: 'success',
+                title: `Loan ${status.toLowerCase()}ed successfully`
+            })
 
-        notificationCard.remove();
+            notificationCard.remove();
 
-        if (status === 'ACTIVE') {
-            loan.status = 'ACTIVE';
-            const loanCardHTML = renderLoanCard(loan, userId);
-            const loanList = document.getElementById('loan-list');
-            loanList.insertAdjacentHTML('afterbegin', loanCardHTML);
-        } else if (status === 'REJECTED') {
-            window.location.reload();
+            if (status === 'ACTIVE') {
+                loan.status = 'ACTIVE';
+                const loanCardHTML = renderLoanCard(loan, userId);
+                const loanList = document.getElementById('loan-list');
+                loanList.insertAdjacentHTML('afterbegin', loanCardHTML);
+            } else if (status === 'REJECTED') {
+                window.location.reload();
+            }
         }
+    } catch (error) {
+        presentError(error);
     }
 }
 
@@ -478,7 +478,7 @@ async function getAllLoans() {
             presentShowHiddenLoans();
         }
     } catch (error) {
-        console.error('Error getting loans:', error.message);
+        presentError(error);
     } finally {
         // Hide the loading indicator after data is loaded
         toggleLoading("loan-list");
