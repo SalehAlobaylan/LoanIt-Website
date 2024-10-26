@@ -374,9 +374,13 @@ async function handleLoanAction(loanId, status, notificationCard, loan = null) {
             })
 
             notificationCard.remove();
-
+            const notificationList = document.getElementById('notification-list');
+            if (notificationList.children.length === 0) {
+                if (notificationList) {
+                    notificationList.innerHTML = '<p class="text-center" style="color: var(--text-secondary-color); margin: 50px 0px;">No new notifications</p>';
+                }
+            }
             if (status === 'ACTIVE') {
-                console.log("fjkdsl")
                 loan.status = 'ACTIVE';
                 const loanCardHTML = renderLoanCard(loan, userId);
                 const loanList = document.getElementById('loan-list');
