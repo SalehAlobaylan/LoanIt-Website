@@ -48,7 +48,7 @@ async function createLoan(userId, partyPhoneNumber, role, title, amount, date, n
 
 async function updateLoanStatus(partyId, loanId, status) {
     try {
-        const loan = await getLoanById(loanId);
+        const loan = await Loan.findById(loanId);
         if (loan.status !== 'PENDING') {
             throw new Error('LOAN_010');
         }
