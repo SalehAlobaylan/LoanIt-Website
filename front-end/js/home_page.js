@@ -23,7 +23,6 @@ sortElements.forEach(element => {
 });
 
 function presentError(error) {
-    // the error can be in the form of code message and icon, or it can be error from js, we want to present the error if its in the first form only, other that that we will show generic error message
     if (error.message) {
         Swal.fire({
             icon: 'error',
@@ -106,7 +105,8 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
 
                     // Submit transaction based on userId and loanId
                     transactions.createTransaction(userId, _id, transactionData.type, transactionData.amount, transactionData.date, transactionData.notes)
-                        .then(() => {
+                        .then((data) => {
+                            if (!data) return;
                             transactionModal.hide();  // Close the modal after successful submission
                             getAllLoanTransactions(_id)
                             updateLoan(_id);
@@ -455,7 +455,8 @@ async function getAllLoans() {
         loanList.innerHTML = ''; // Clear existing loans again, though this is redundant after the earlier line
 
         loans.forEach((loan, index) => {
-            if(!loan.isHidden && loan.status !== 'REJECTED' && loan.status !== 'PENDING') {
+            const isOwner = userId === loan.ownerId;
+            if(!loan.isHidden && loan.status !== 'REJECTED' || (isOwner && loan.status === 'PENDING')) {
                 const loanCardHTML = renderLoanCard(loan, userId, index);
                 loanList.insertAdjacentElement('beforeend', loanCardHTML);
             }

@@ -1,6 +1,7 @@
 const transactionController = require('../controllers/transaction');
 const { authenticate } = require('../middlewares/auth');
 const { validateRequest } = require('../middlewares/validation');
+const { createTransactionSchema } = require('../validators/transactionSchemas.js');
 
 const express = require('express');
 const router = express.Router({ mergeParams: true });

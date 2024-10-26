@@ -1,5 +1,19 @@
 import { api } from './api.js';
-
+function presentError(error) {
+    if (error.message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred. Please try again later.'
+        });
+    }
+}
 async function createTransaction(userId, loanId, type, amount, date, notes) {
     try {
         const data = await api.post(`/user/${userId}/loans/${loanId}/transactions`, {

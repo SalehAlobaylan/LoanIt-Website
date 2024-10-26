@@ -6,7 +6,7 @@ const { createLoanSchema } = require('../validators/loanSchemas');
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 // Route to create a loan
-router.post('/', loanController.createLoan);
+router.post('/', validateRequest(createLoanSchema), loanController.createLoan);
 
 // Route to get a loan by ID
 router.get('/:loanId', loanController.getLoanById);

@@ -9,7 +9,7 @@ async function createTransaction(userId, loanId, type, amount, date, notes) {
         if (!loan) {
             throw new Error('LOAN_008');  // Throw an error if loan not found
         }
-        if (type === 'repayment' && amount > loan.remainingAmount) {
+        if (type === 'REPAYMENT' && parseFloat(amount) > loan.remainingAmount) {
             throw new Error('TRANS_007')
         }
 

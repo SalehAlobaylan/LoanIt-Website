@@ -26,12 +26,13 @@ const createLoanSchema = Joi.object({
         }),
     amount: Joi.number()
         .positive()
-        .max(10000000)
+        .max(10000000000) // Max value validation
         .precision(2)
         .required()
         .messages({
             'number.base': 'LOAN_005', // Invalid loan amount format
             'number.positive': 'LOAN_005', // Loan amount must be positive
+            'number.max': 'LOAN_005', // Loan amount exceeds the maximum allowed
             'any.required': 'LOAN_005' // Amount is required
         }),
     date: Joi.date()

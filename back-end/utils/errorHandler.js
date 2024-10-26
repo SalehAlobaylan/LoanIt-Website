@@ -53,6 +53,7 @@ const errorCodes = {
     TRANS_005: { message: "Invalid transaction amount", icon: "TRANSACTION", status: 400 },
     TRANS_006: { message: "Transactions not found", icon: "TRANSACTION", status: 404 },
     TRANS_007: { message: "Repayment amount exceeds remaining loan amount", icon: "TRANSACTION", status: 400 },
+    TRANS_008: { message: "Invalid date format", icon: "TRANSACTION", status: 400 },
 };
 
 
