@@ -22,6 +22,23 @@ sortElements.forEach(element => {
     element.addEventListener('click', sortLoans);
 });
 
+function presentError(error) {
+    // the error can be in the form of code message and icon, or it can be error from js, we want to present the error if its in the first form only, other that that we will show generic error message
+    if (error.message) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message
+        });
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred. Please try again later.'
+        });
+    }
+}
+
 // Helper function to determine the color based on the loan status
 function getStatusColor(status) {
     const statusColors = {
@@ -95,7 +112,7 @@ function transactionsEventListener(loanCardHTML, _id, userId) {
                             updateLoan(_id);
                         })
                         .catch((error) => {
-                            console.error('Error submitting transaction:', error);
+                            presentError(error);
                         });
                 });
             })
@@ -438,7 +455,7 @@ async function getAllLoans() {
         loanList.innerHTML = ''; // Clear existing loans again, though this is redundant after the earlier line
 
         loans.forEach((loan, index) => {
-            if(!loan.isHidden) {
+            if(!loan.isHidden && loan.status !== 'REJECTED' && loan.status !== 'PENDING') {
                 const loanCardHTML = renderLoanCard(loan, userId, index);
                 loanList.insertAdjacentElement('beforeend', loanCardHTML);
             }
@@ -516,7 +533,7 @@ function sortLoans(e) {
     loanList.innerHTML = ''; // Clear existing loans
     loans.forEach((loan, index) => {
         
-        if (!loan.isHidden) {
+        if (!loan.isHidden && loan.status !== 'REJECTED' && loan.status !== 'PENDING') {
         const loanCardHTML = renderLoanCard(loan, userId, index);
         loanList.insertAdjacentElement('beforeend', loanCardHTML);
         }
