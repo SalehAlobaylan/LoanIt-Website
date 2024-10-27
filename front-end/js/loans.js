@@ -1,17 +1,16 @@
 import { api } from './api.js';
 
-async function createLoan(partyPhoneNumber, role, title, amount, date, notes) {
-    try {
-        const userId = api.getUserId();
-        const data = await api.post(`/user/${userId}/loans`, {
-            partyPhoneNumber, role, title, amount, date, notes
-        })
-
+function createLoan(partyPhoneNumber, role, title, amount, date, notes) {
+    const userId = api.getUserId();
+    api.post(`/user/${userId}/loans`, {
+        partyPhoneNumber, role, title, amount, date, notes
+    })
+    .then((data) => {
         window.location.href = './home-page.html';
-
-    } catch (error) {
+    })
+    .catch((error) => {
         console.error('Loan creation error:', error.message);
-    }
+    });
 }
 
 document.getElementById('loan-form')?.addEventListener('submit', function(event) {
