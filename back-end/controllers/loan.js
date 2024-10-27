@@ -5,7 +5,6 @@ const { sendError } = require('../utils/errorHandler');
 const createLoanController = async (req, res, next) => {
     const { userId } = req.params;
     const { partyPhoneNumber, role, title, amount, date, notes } = req.body;
-    console.log(partyPhoneNumber, role, title, amount, date, notes);
     try {
         const loan = await createLoan(userId, partyPhoneNumber, role, title, amount, date, notes);
         res.status(201).json({ data: loan });

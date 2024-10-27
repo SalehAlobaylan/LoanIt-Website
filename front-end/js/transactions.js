@@ -38,7 +38,6 @@ async function getAllTransactions(userId, loanId) {
 async function deleteTransaction(userId, loanId, transactionId) {
     try {
         const data = await api.delete(`/user/${userId}/loans/${loanId}/transactions/${transactionId}`);
-        console.log(data)
         return data.status == 204;
     } catch (error) {
         presentError(error);

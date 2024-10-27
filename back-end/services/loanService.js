@@ -108,7 +108,6 @@ async function getLoanById(loanId) {
 
         // Calculate amounts based on transactions
         const amounts = calculateAmounts(transactions);
-        console.log("calculateAmounts(transactions)", amounts)
         loan.totalAmount = amounts.totalAmount;
         loan.totalPaid = amounts.totalPaid;
         loan.remainingAmount = amounts.remainingAmount;
@@ -118,7 +117,6 @@ async function getLoanById(loanId) {
 
         // Optionally, remove transactions if not needed in the response
         loan.transactions = null;
-        console.log("loan", loan)
         return loan;
     } catch (error) {
         throw error;

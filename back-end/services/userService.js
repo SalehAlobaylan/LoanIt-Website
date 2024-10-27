@@ -33,10 +33,8 @@ async function updateUserNameAndEmail(userId, fullName, email) {
         if (!user) {
             throw new Error('AUTH_002');
         }
-        console.log(user);
         user.fullName = fullName || user.fullName;
         user.email = email || user.email;
-        console.log(fullName, email);
         await user.save();
         return user;
     } catch (error) {

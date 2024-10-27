@@ -3,7 +3,6 @@ import { api } from './api.js';
 async function register(fullName, phoneNumber, email, password) {
     try {
         const data = await api.post('/auth/register', { fullName, phoneNumber, email, password });
-        console.log(data); // Log the response to see if the token is returned correctly
 
             localStorage.setItem('token', data.token); // If the API returns a token
             localStorage.setItem('user', JSON.stringify(data));
@@ -26,7 +25,6 @@ document.getElementById('register-form')?.addEventListener('submit', function(ev
 async function loginUser(phoneNumber, password) {
     try {
         const data = await api.post('/auth/login', { phoneNumber, password });
-        console.log(data); 
 
         if (data.token) {
             localStorage.setItem('token', data.token); 

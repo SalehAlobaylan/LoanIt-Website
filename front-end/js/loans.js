@@ -6,7 +6,6 @@ async function createLoan(partyPhoneNumber, role, title, amount, date, notes) {
         const data = await api.post(`/user/${userId}/loans`, {
             partyPhoneNumber, role, title, amount, date, notes
         })
-        console.log(data)
 
         window.location.href = './home-page.html';
 
@@ -42,7 +41,6 @@ async function getAllLoans() {
     try {
         const userId = api.getUserId();
         const data = await api.get(`/user/${userId}/loans`);
-        console.log(data);
     } catch (error) {
         console.error('Error getting loans:', error.message);
     }
