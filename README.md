@@ -15,8 +15,8 @@ https://www.figma.com/design/mLWnqCRJTOYUqzVrz5RNqY/Loanit?node-id=0-1&node-type
 
 ## Demo Screenshots:
 <div>
-        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/1.jpg" alt="LoanIt" width="200"/>
-        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/2.jpg" alt="LoanIt" width="200"/>
+        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/16.jpg" alt="LoanIt" width="200"/>
+        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/17.jpg" alt="LoanIt" width="200"/>
         <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/7.jpg" alt="LoanIt" width="200"/>
         <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/10.jpg" alt="LoanIt" width="200"/>
 </div>
