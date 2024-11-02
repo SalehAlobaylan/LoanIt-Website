@@ -12,3 +12,11 @@ https://www.canva.com/design/DAGUaVrEuNw/eWrY7NFl7ZVQ-p128HmYbQ/view?utm_content
 
 ## the pattern and designing stage:
 https://www.figma.com/design/mLWnqCRJTOYUqzVrz5RNqY/Loanit?node-id=0-1&node-type=canvas&t=wXmO2oEmV4V4eV2g-0
+
+## Demo Screenshots:
+<div>
+        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/1.jpg" alt="LoanIt" width="200"/>
+        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/2.jpg" alt="LoanIt" width="200"/>
+        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/7.jpg" alt="LoanIt" width="200"/>
+        <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/projectDemoScreenshots/10.jpg" alt="LoanIt" width="200"/>
+</div>
