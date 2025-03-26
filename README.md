@@ -1,14 +1,27 @@
-## To use the actual project directly: 
-## https://loanitt.saudmt.com/      <img href="https://loanitt.saudmt.com/" src="https://github.com/SalehAlobaylan/LoanIt-Website/blob/main/front-end/resources/TitiledLogo-removebg-preview.png" alt="LoanIt" width="80"/>
-### Default user which has ready contributed examples demostrates the multipule users intractions in the website (Or you can create your user then create loans with other user)
-#### Phone number:
-        555555555
-#### Password:
-        00000000
+## Key Features:
 
 
-## the presentation:
-https://www.canva.com/design/DAGUaVrEuNw/eWrY7NFl7ZVQ-p128HmYbQ/view?utm_content=DAGUaVrEuNw&utm_campaign=designshare&utm_medium=link&utm_source=editor
+
+* Interactive UX/UI: Designed with vanilla JavaScript to provide a user-friendly and engaging experience.
+
+
+
+* Peer-to-Peer Lending: Manage loans between individuals with ease.
+
+
+
+* Transaction Tracking: Monitor borrowing and lending activities through a detailed dashboard.
+
+
+
+* Secure Authentication: Utilizes JWT for secure user authentication.
+
+
+
+* Input Validation: Ensures data integrity and security with Joi.
+
+
+
 
 ## the pattern and designing stage:
 https://www.figma.com/design/mLWnqCRJTOYUqzVrz5RNqY/Loanit?node-id=0-1&node-type=canvas&t=wXmO2oEmV4V4eV2g-0
